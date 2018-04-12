@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/mvc		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	"
+	default-lazy-init="true">
+	
+	<!-- Spring MVC 公共配置 -->
+	<!-- 已经被context:component-scan包括 -->
+<!-- 	<context:annotation-config /> -->
+
+	<!-- 扫描注册，多个基本包 可以用逗号隔开 -->
+	<context:component-scan base-package="com.hua.service">
+	</context:component-scan>	
+
+	<!-- -
+	注解映射 驱动，使用spring内置的json转换
+	配合使用@ResponseBody注解，可以将java对象转成json格式数据
+	 jquery ajax 框架将拿到的json格式数据自动转成js对象
+	 该配置自动注册 DefaultAnnotationHandlerMapping 和 AnnotationMethodHandlerAdapter 2个bean，
+	 是Spring MVC 为@Controller分发请求所必须的，并提供了数据绑定:
+	 @NumberFormat @DateTimeFormat @Valid ...
+	 -->
+	 <!-- 注册DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter 
+	 两个bean。已经在下面定义。 -->
+<!-- 	<mvc:annotation-driven /> -->
+<!-- RequestMappingHandlerMapping 已取代 DefaultAnnotationHandlerMapping -->
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>	
+
+	<!-- 扫描控制器 (必须放在此文件中) -->
+	<context:component-scan base-package="com.hua.controller">
+	</context:component-scan>
+	<!-- RequestMappingHandlerAdapter 已取代 AnnotationMethodHandlerAdapter -->
+	<!--  -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<!-- 同步级会话开关 -->
+		<property name="synchronizeOnSession" value="true" />
+		<!-- 消息转换器数组 -->
+		<property name="messageConverters">
+			<list>
+				<!-- xml转换器 -->
+				<ref bean="xmlMessageConverter" />
+				<!-- json转换器 -->
+				<ref bean="jsonMessageConverter" />
+				<!-- 普通字符串转换器 -->
+				<ref bean="stringMessageConverter" />
+			</list>
+		</property>
+		<!-- 自定义请求参数解析器集合,也即放在url中的参数
+			contentType = application/x-www-form-urlencoded 
+			解析此类型的参数 -->
+		<property name="customArgumentResolvers">
+			<list>
+				<bean class="com.hua.mvc.ParameterResolver" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- xml 转换器 -->
+	<bean id="xmlMessageConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		<!-- 构造方法注入 -->	
+		<constructor-arg name="marshaller" ref="xstreamMarshaller" />
+		<constructor-arg name="unmarshaller" ref="xstreamMarshaller" />		
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/plain;charset=UTF-8</value>
+				<!-- 此处设置才能解决响应数据的中文乱码问题 -->
+				<value>application/xml;charset=UTF-8</value>
+				<value>application/xhtml+xml;charset=UTF-8</value>				
+			</list>
+		</property>	
+	</bean>
+	
+	<!-- Define the OXM marshaller which is used to convert the Objects from/to XML. -->
+	<bean id="xstreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+		<property name="streamDriver">
+			   <bean class="com.thoughtworks.xstream.io.xml.DomDriver">
+			   		<constructor-arg name="encoding" value="UTF-8" />
+			   </bean>
+		</property>
+		<property name="converters">
+			<array>
+				<!-- java.util.Date日期时间转换器, 注意 XStream只对java.util.Date类型做了格式支持 -->
+				<bean class="com.thoughtworks.xstream.converters.basic.DateConverter">
+					<constructor-arg name="defaultFormat" value="yyyy-MM-dd HH:mm:ss"/>
+					<!-- 构造方法参数是数组 -->
+					<constructor-arg name="acceptableFormats">
+						<!-- 数组 -->
+						<array>
+							<value>yyyy-MM-dd</value>
+							<value>yyyyMMdd</value>
+							<value>HH:mm:ss</value>
+							<value>HHmmss</value>
+							<value>yyyyMMddHHmmss</value>
+							<value>yyyy-MM-dd HH:mm:ss.SSS</value>
+							<value>yyyyMMddHHmmssSSS</value>
+							<value>yyyy年MM月dd日</value>	
+						</array>
+					</constructor-arg>
+				</bean>
+			</array>
+		</property>
+		<!-- 开启注解 -->
+		<property name="autodetectAnnotations" value="true" />
+		<property name="encoding" value="UTF-8" />
+		<property name="annotatedClasses">
+			<array>
+				<!-- 实体类中需要同时使用 @XStreamAlias 或 @XStreamAliasType 标注 -->
+				<value>com.hua.bean.SimplePersonSearchBean</value>
+				<value>com.hua.bean.PersonSearchBean</value>				
+			</array>
+		</property>
+	</bean>
+	
+	<!--  -->
+	
+	<!-- json转换器 -->
+	<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/plain;charset=UTF-8</value>
+				<value>application/json;charset=UTF-8</value>
+			</list>
+		</property>
+		<property name="objectMapper">
+			<bean class="com.hua.mapper.JsonObjectMapper" />
+		</property>
+	</bean>
+	
+	<!-- 字符串转换器 -->
+	<bean id="stringMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+	   <property name ="supportedMediaTypes">
+	      <list>
+	      		<!-- 普通文本/html -->
+	          <value>text/plain;charset=UTF-8</value>
+	          <value>text/html;charset=UTF-8</value>
+	      </list>
+	    </property>	
+	    <!-- 返回的头文件不会有大串AcceptCharset -->
+	    <property name="writeAcceptCharset" value="false" />
+	</bean>
+	
+	<!-- 视图解析器: 根据客户端的不同请求决定不用的view进行响应 -->
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<!-- 视图解析器集合 -->
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+				<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<!-- jsp解析器 -->
+					<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		        	<property name="prefix" value="/WEB-INF/jsp"/>
+		        	<property name="suffix" value=".jsp"></property>					
+				</bean>
+			</list>
+		</property>	
+	</bean>
+	
+	<!-- 声明内容判断管理器Bean -->
+	<bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<!-- 设置为true以忽略对Accept Header的支持-->
+	  	<property name="ignoreAcceptHeader" value="true"/>
+	  	<!-- 在没有扩展名时即: "/user/1" 时的默认展现形式 -->
+		<property name="defaultContentType" value="text/html"/>
+	  	<!-- 扩展名至mimeType的映射,即 /user.json => application/json -->
+		<property name="mediaTypes">
+			<map>
+				<entry key="html" value="text/html" />
+				<entry key="json" value="application/json" />
+				<entry key="xml" value="application/xml" />
+			</map>
+		</property>
+		<!-- 用于开启 /userinfo/123?format=json 的支持 -->
+		<property name="favorParameter" value="false"/>	
+	</bean>
+	
+	<!-- 文件上传解析器: set spring upload file max size -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	  <property name="maxUploadSize" value="5000000" />
+	</bean>	
+	
+	<!-- 视图解析 -->
+
+	<!-- 拦截器 -->
+	
+<!-- 	<mvc:default-servlet-handler /> -->
+	
+	<!-- 对静态资源文件的访问 (方案2 二选一) 注意 mapping路径值要写成配对方式，本地路径值直接写 -->
+	<mvc:resources location="/views/" mapping="/views/**" cache-period="31556926" />
+	<mvc:resources location="/image/" mapping="/image/**" cache-period="31556926" />
+	<mvc:resources location="/js/" mapping="/js/**" cache-period="31556926" />
+	<mvc:resources location="/css/" mapping="/css/**" cache-period="31556926" />
+
+	<!-- 拦截器 -->
+	<mvc:interceptors>
+		<!-- 若不配置映射路径，则拦截所有，类似于总拦截 -->
+		<!-- 如果是restfull风格的url，静态资源也会被拦截 -->
+		<mvc:interceptor>
+			<!-- 包含映射路径 -->
+			<mvc:mapping path="/**"/>
+			<!-- 将 mvc:resources 设定的资源映射路径排除在外 -->
+			<mvc:exclude-mapping path="/views/**"/>
+			<mvc:exclude-mapping path="/image/**"/>
+			<mvc:exclude-mapping path="/js/**"/>
+			<mvc:exclude-mapping path="/css/**"/>
+			<!-- 拦截器bean，实现 HandlerInterceptor 接口 -->
+			<bean class="com.hua.interceptor.SystemHandlerInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+</beans>

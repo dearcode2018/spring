@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- 
+		beans的default-autowire 指定的该xml配置文件所有bean的默认
+		包装方式，当前所有bean默认都采用此方式
+		
+		beans的default-autowire-candidates指定当前xml配置文件所有bean
+		的默认是否允许自动装配到其他bean
+	
+	 -->
+
+	<!-- 
+		spring 依赖注入有多种形式， 通过 xml 进行IOC设置的形式有
+		方式1: 构造方法注入
+		方式2: setter方法注入
+		方式3: 静态工厂方法注入
+		方式4: 实例工厂方法注入
+	
+		工厂方法注入 与 setter方法注入很相似.
+		实例工厂的意思是获取对象实例的方法不是静态的，所以你需要首先new工厂类，再调用普通的实例方法	
+	
+	 -->
+
+	<!-- 
+		bean中有一个属性 autowire，可以选择自动装配的类型
+		
+		autowire=no 表示不使用autowire，直接通过显式的方式声明引用关系;
+		
+		autowire=byName 表示根据名称在容器中寻找同名的bean，没有找到则不发生什么.
+		
+		autowire=byType 表示根据类型在容器中寻找bean，如果有2个或2个以上此类型
+		的bean，则直接抛异常，没有找到则不发生什么.
+		
+		autowire=constructor 表示使用默认的构造方法构造一个此类型的对象？
+		
+		autowire=autodetect 表示自定探查决定是使用byType或byName.
+		
+		autowire=default 表示由上级beans标签的autowire属性确定该属性的值.
+		
+		autowire评估:
+		autowire=byType比较适合目标bean是单例的情形，若存在多个同类型的bean，
+		可以将除剩下的一个bean外，都设置为autowire-candidate=false即可，这样
+		该bean就不会被自动装配到其他bean中.
+	 -->
+
+	<!-- UserBean 对象1，不允许作为自动装配候选项，
+	由于其名称与类名一致，因此autowire = byName 可以找到 -->
+	<bean id="userBean" name="userBean" class="com.hua.bean.UserBean"
+ 		autowire-candidate="false">
+ 		<property name="username" value="不允许自动装配到其他bean, name=userBean, autowire = byName 可以找到" />
+ 	</bean>
+	
+	<!-- UserBean 对象2，允许作为自动装配候选项 -->
+ 	<bean id="userBeanTwo" name="userBeanTwo" class="com.hua.bean.UserBean"
+ 		autowire-candidate="true">
+ 		 <property name="username" value="name=userBeanTwo, 允许自动装配到其他bean, autowire = byType 可以找到" />
+ 	</bean>
+
+	<!-- UserBean 对象3，不允许作为自动装配候选项 -->
+	<bean id="userBeanThree" name="userBeanThree" class="com.hua.bean.UserBean"
+		autowire-candidate="false">
+		 <property name="username" value="不允许自动装配到其他bean, name=userBeanThree, autowire = byName/byType 均找不到" />
+	</bean>
+
+	<!-- 
+		上面声明了2个bean，第一个声明为不允许自动装配到其他bean，
+		第二bean可以，但是其id或名称都和需要注入的属性名称不同，
+		因此autowire=byName都会失败，只有id或name等于userBean
+		才能注入成功.
+		一个bean为autowire设置了值，则其没有公开设置的属性，都会遵循其
+		原则，而特别设
+	 -->
+	<!-- 场景1: 引用了UserBean，自动装配 (只可以找到 name 为 userBean 的 bean) -->
+	<bean id="autowireBeanByName" name="autowireBeanByName" class="com.hua.bean.AutowireBean"
+		autowire-candidate="false" autowire="byName">
+	</bean>
+	
+	<!-- 场景2: 引用了UserBean，自动装配，根据类型装配成功 -->
+	<bean id="autowireBeanByType" name="autowireBeanByType" class="com.hua.bean.AutowireBean"
+		autowire-candidate="false" autowire="byType">
+	</bean>
+	
+	<!-- 场景3: 引用了UserBean，自动装配，显式声明某个属性的引用bean，忽略整体bean的装配设置 -->
+	<bean id="autowireBeanExplicit" name="autowireBeanExplicit" class="com.hua.bean.AutowireBean"
+		autowire-candidate="false">
+		<!-- 为该属性指定引用的bean，忽略整体bean的装配设置 -->
+		<!-- 主动引用 可以引用容器中任何同类型的bean -->
+		<!-- <property name="userBean" ref="userBean" /> -->
+ 	<!-- 	<property name="userBean" ref="userBeanTwo" /> -->
+		<property name="userBean" ref="userBeanThree" />
+	</bean>	
+
+</beans>

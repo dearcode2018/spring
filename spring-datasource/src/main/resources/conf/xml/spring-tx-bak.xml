@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"	
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd	
+	" default-lazy-init="true">
+	
+
+	<!-- 事务管理器: 基于数据源事务管理器 -->
+	<bean id="dataSourceTransactionManager" 
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 使用动态数据源 -->
+		<property name="dataSource" ref="dynamicDataSource" />
+	</bean>
+	
+	<!-- 事务AOP配置 -->
+	<aop:config>
+		<aop:pointcut id="transactionPointCut" expression="execution(* com.hua.service..*.*(..))" />
+		<!-- 引用上面的切点 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="transactionPointCut"/>
+	</aop:config>
+
+	<!-- 事务通知 -->
+	<tx:advice id="txAdvice" transaction-manager="dataSourceTransactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="modify*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="tx*" propagation="REQUIRED" />
+			<tx:method name="execute*" propagation="REQUIRED" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 数据源AOP配置 -->
+	<aop:config>
+		<!-- DataSourceAspect 使用注解标识 -->
+		<aop:aspect id="dataSourceAspect" ref="dataSourceAspect">
+			<aop:pointcut id="pointcutDaoOne" expression="execution (* com.hua.service.one.*.*(..))" />
+			<aop:pointcut id="pointcutDaoTwo" expression="execution (* com.hua.service.two.*.*(..))" />
+			<aop:pointcut id="pointcutDaoThree" expression="execution (* com.hua.service.three.*.*(..))" />	
+			<!-- 切点引用，在执行之前先设置好数据源 -->
+			<aop:before pointcut-ref="pointcutDaoOne" method="setDataSource01" />	
+			<aop:before pointcut-ref="pointcutDaoTwo" method="setDataSource02" />	
+			<aop:before pointcut-ref="pointcutDaoThree" method="setDataSource03" />							
+		</aop:aspect>
+	
+	</aop:config>
+
+</beans>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+<bean id="startupTask" class="com.xyt.ocr.schedule.StartupTask"/>
+<bean id="startupScheduledTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+    <property name="delay" value="5000"/>
+    <property name="period" value="0"/>
+    <property name="timerTask" ref="startupTask"/>
+</bean>
+
+<bean id="putDataToCacheTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail">
+        <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="concurrent" value="false"/>
+            <property name="targetObject" ref="startupTask"/>
+            <property name="targetMethod" value="putDataToCache"/>
+        </bean>
+    </property>
+    <property name="cronExpression" value="0 0 2 * * ?"/>
+</bean>
+
+<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">    
+    <property name="scheduledTimerTasks">    
+        <list>    
+             <ref local="startupScheduledTask" /> 
+        </list>    
+    </property>            
+</bean> 
+
+<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+      <property name="triggers">
+		<list>
+			 <ref local="putDataToCacheTrigger" /> 
+		</list>
+      </property>
+      <property name="startupDelay" value="6"/>
+</bean>
+
+</beans>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- 
+	
+	数组/集合如何注入值
+	array/list/set/map/props
+	注入方式和注入类型密切相关，只是研究针对一种类型进行装配，
+	并不是研究怎么实例化一个对象，只是研究如何实例化对象中的
+	某个属性.
+	这里通过setter方式研究如何装配类的属性
+	 -->
+	
+	<!-- 1. 数组装配 -->
+	<bean id="arrayCompositeType" class="com.hua.bean.CompositeType">
+		<property name="array">
+			<array>
+				<value>abc</value>
+				<value>bcd</value>
+			</array>
+		</property>
+	
+	</bean>
+		
+	<!-- 2. list装配 -->
+	<bean id="listCompositeType" class="com.hua.bean.CompositeType">
+		<property name="list">
+			<list>
+				<value>1</value>
+				<value>2</value>
+			</list>
+		</property>
+	</bean>	
+
+	<!-- 3. set装配 -->		
+	<bean id="setCompositeType" class="com.hua.bean.CompositeType">
+		<property name="set">
+			<set>
+				<value>abc</value>
+				<value>bcd</value>
+			</set>
+		</property>
+	</bean>
+
+	<!-- 4. map装配 -->		
+	<bean id="mapCompositeType" class="com.hua.bean.CompositeType">
+		<property name="map">
+			<map>
+				<description>map</description>
+				<entry>
+					<!-- key 也是一种类型，必须用Object来对待 -->
+					<key><value>min</value></key>
+					<value>1</value>
+				</entry>
+				<entry>
+					<key><value>max</value></key>
+					<value>200</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- 5. properties装配 -->		
+	<bean id="propsCompositeType" class="com.hua.bean.CompositeType">
+		<property name="props">
+			<props>
+				<!-- key默认直接就是String类型 -->
+				<prop key="min">1</prop>
+				<prop key="max">300</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

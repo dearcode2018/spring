@@ -1,0 +1,153 @@
+/**
+  * @filename UserFullAspect.java
+  * @description  
+  * @version 1.0
+  * @author qye.zheng
+ */
+package com.hua.aspect;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.JoinPoint.StaticPart;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.reflect.SourceLocation;
+
+import com.hua.bean.User;
+
+ /**
+ * @type UserFullAspect
+ * @description  
+ * @author qye.zheng
+ */
+public final class UserFullAspect {
+	
+	/**
+	 * 任何通知 方法都可以将第一个参数定义为org.aspectj.lang.JoinPoint类型
+	 * (org.aspectj.lang.ProceedingJoinPoint 是其子类，给around方法调用目标方法作用)
+	 */
+	
+	/**
+	 * 
+	 * @description 
+	 * @param joinPoint
+	 * @author qye.zheng
+	 */
+	public void advice(final JoinPoint joinPoint)
+	{
+		// 获取代理对象
+		Object _this = joinPoint.getThis();
+		// 获取目标对象
+		Object target = joinPoint.getTarget();		
+		// 获取方法参数值
+		Object[] args = joinPoint.getArgs();
+		// 方法签名
+		Signature sn = joinPoint.getSignature();
+		StaticPart staticPart = joinPoint.getStaticPart();
+		String kind = joinPoint.getKind();
+		// 源码位置 对象
+		SourceLocation sourceLocation = joinPoint.getSourceLocation();
+		
+		String longString = joinPoint.toLongString();
+		String shortString = joinPoint.toShortString();
+		
+		// 输出方法路径
+		System.out.println("begining method: " + joinPoint.getTarget().getClass().getName() 
+				+ "." + joinPoint.getSignature().getName());
+	}
+	
+	/**
+	 * 
+	 * @description 
+	 * @param joinPoint
+	 * @author qye.zheng
+	 */
+	/*
+	 *	<aop:pointcut id="userBusinessCut" expression="execution(* com.hua.service.*.*(com.hua.bean.User,..)) and args(user,..)" />
+	 * <aop:before pointcut-ref="userBusinessCut" method="doBefore"/>
+	 * 这样配置 才能正确注入值
+	 */
+	//public void doBefore(final User user)
+	public void doBefore(final JoinPoint joinPoint, final User user)
+	{
+		// 输出方法路径
+		System.out.println("begining method: " + joinPoint.getTarget().getClass().getName() 
+				+ "." + joinPoint.getSignature().getName());
+		//System.out.println("arg: " + joinPoint.getArgs()[0].toString());
+		System.out.println(user.toString());
+	}
+	
+	/**
+	 * around 可以覆盖 before / returning / throwing / after 场景，因此，
+	 * around 要独立使用，尽量不要合在一起使用，不然很难区分各个通知的职责
+	 */
+	/**
+	 * 
+	 * @description 
+	 * @param pJoinPoint
+	 * @return
+	 * @throws Throwable
+	 * @author qye.zheng
+	 */
+	public Object doAround(final ProceedingJoinPoint pJoinPoint, final User user) throws Throwable
+	{
+		// before
+		long time = System.currentTimeMillis();
+		
+		// 执行 目标的方法
+		Object result = null;
+		try {
+			result = pJoinPoint.proceed();
+			// returning
+		} catch (Exception e) {
+			// throwing
+			e.printStackTrace();
+		}
+		
+		// after
+		
+		time = System.currentTimeMillis() - time;
+		System.out.println("process time: " + time + " ms");
+		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @description 
+	 * @param joinPoint
+	 * @param throwable
+	 * @author qye.zheng
+	 */
+	public void doThrowing(final JoinPoint joinPoint, final Throwable throwable, final User user)
+	{
+		System.out.println("method: " + joinPoint.getTarget().getClass().getName() 
+				+ "." + joinPoint.getSignature().getName() + " throw exception ");
+		// 输出异常信息
+		throwable.printStackTrace();
+	}
+	
+	/**
+	 * 
+	 * @description 
+	 * @param joinPoint
+	 * @param returning
+	 * @author qye.zheng
+	 */
+	public void doReturning(final JoinPoint joinPoint, final Object returning, final User user)
+	{
+		System.out.println("return: " + returning.toString());
+	}
+	
+	/**
+	 * 
+	 * @description 
+	 * @param joinPoint
+	 * @author qye.zheng
+	 */
+	public void doAfter(final JoinPoint joinPoint, final User user)
+	{
+		System.out.println("ending method: " + joinPoint.getTarget().getClass().getName() 
+				+ "." + joinPoint.getSignature().getName());
+	}
+	
+}

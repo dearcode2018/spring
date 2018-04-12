@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	"
+	default-lazy-init="true">
+
+	<!-- 声明一个业务bean -->
+	<bean id="userBusiness" class="com.hua.aop.advice.UserBusinessImpl" />
+
+	<!-- 声明通知类 -->
+	<bean id="userAspectAdvice" class="com.hua.aop.advice.UserAspectAdvice" />
+
+	<!-- aop 配置 -->
+	<aop:config>
+		<aop:aspect id="userAspect" ref="userAspectAdvice">
+			<!-- 定义切点 -->
+			<aop:pointcut expression="execution(* com.hua.aop.advice.UserBusinessImpl.*(..))"
+			 id="userPointcut"/>
+			 <!-- 注意: around环绕通知会对其他通知产生干扰作用，因此，
+			 环绕通知最好不要和其他通知同时放在一个业务中，因为环绕通知
+			 可以包含其他所有通知的功能.
+			  -->
+			<aop:before method="doBefore" pointcut-ref="userPointcut"/>
+			
+			<!-- 需要指定doReturning方法中接收返回值的参数名 -->
+			<aop:after-returning method="doReturning" 
+			pointcut-ref="userPointcut" returning="returnValue" />
+			
+			<!-- 需要指定doThrow方法中接收异常的参数名 -->
+			<aop:after-throwing method="doThrow" 
+			pointcut-ref="userPointcut" throwing="throwable" />
+			
+			<aop:after method="doAfter" pointcut-ref="userPointcut"/>
+			
+			<!-- <aop:around method="doAround" pointcut-ref="userPointcut"/> -->
+		</aop:aspect>
+	</aop:config>
+
+</beans>

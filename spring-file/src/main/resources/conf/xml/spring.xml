@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- spring 文件， 注意 路径应该是相对当前xml文件的路径，
+		而不是从类根路径开始 -->
+	<import resource="spring-file.xml" />
+
+
+
+
+
+
+
+
+
+</beans>

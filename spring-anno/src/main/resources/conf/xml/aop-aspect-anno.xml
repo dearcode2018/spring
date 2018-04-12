@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	" default-lazy-init="true">
+	
+	<!-- 声明一个业务bean -->
+	<bean id="userBusiness" class="com.hua.service.impl.UserBusinessImpl" />
+	
+	<!-- 声明一个业务bean -->
+	<bean id="userBusinessImpl2" class="com.hua.service.impl.UserBusinessImpl2" />	
+	
+	
+	<!-- aspect 切面 也需要成为ioc容器中的一个bean，代理才生效 -->
+	<bean id="fullAnnoAspect" class="com.hua.annotation.UserFullAnnoAspect" />
+		
+	<!-- 开启自动AOP代理bean功能，它可以自动生成使用了@Aspect的通知类的代理类 -->
+	<aop:aspectj-autoproxy />
+	
+</beans>

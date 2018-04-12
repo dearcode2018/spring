@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customer xmlns:ns1="http://castor.exolab.org" ns1:id="2015"
+	ns1:name="李圆圆" ns1:gender="Female" ns1:phoneNumber="15018752632">
+	<ns1:address ns1:updateDt="2016-04-07T18:35:22.331+08:00"
+		ns1:remark="亚洲地区">
+		<ns1:primaryAddresses>
+			<ns1:postalCode>086436</ns1:postalCode>
+			<ns1:addressLine>新疆自治区乌鲁木齐市五山区天长路22号</ns1:addressLine>
+		</ns1:primaryAddresses>
+		<ns1:primaryAddresses>
+			<ns1:postalCode>126733</ns1:postalCode>
+			<ns1:addressLine>广东省广州市天河区平云路11号</ns1:addressLine>
+			<ns1:addressLine2>广东省广州市天河区平云路11号</ns1:addressLine2>
+		</ns1:primaryAddresses>
+		<ns1:billingAddresses>
+			<ns1:receiver>刘雨</ns1:receiver>
+			<ns1:postalCode>986477</ns1:postalCode>
+			<ns1:addressLine>江西省上饶市天水区青山路19号</ns1:addressLine>
+		</ns1:billingAddresses>
+		<ns1:billingAddresses>
+			<ns1:receiver>王洁</ns1:receiver>
+			<ns1:postalCode>566403</ns1:postalCode>
+			<ns1:addressLine>广西省玉林市玉山区广平路13号</ns1:addressLine>
+		</ns1:billingAddresses>
+		<ns1:billingAddresses>
+			<ns1:receiver>赵备</ns1:receiver>
+			<ns1:postalCode>236431</ns1:postalCode>
+			<ns1:addressLine>广东省广州市越秀区清水路17号</ns1:addressLine>
+		</ns1:billingAddresses>
+	</ns1:address>
+	<ns1:remark>新客户</ns1:remark>
+</customer>

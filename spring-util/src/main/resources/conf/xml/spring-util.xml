@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"	
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/util	http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- 加载属性配置方式1: 加载属性配置 bean方式 -->
+	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:conf/properties/spring-bean.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 加载属性配置方式2 : context方式  -->
+	<context:property-placeholder location="classpath:conf/properties/spring-context.properties"/>
+
+	<!-- 加载属性配置方式3 : util方式  -->
+	<util:properties id="utilLoadProperties" local-override="true" location="classpath:conf/properties/spring-util.properties"></util:properties>
+
+	<!-- util 标签 -->
+	<!-- 常量 -->
+	<util:constant static-field="abc" />	
+	
+	<!-- value-type key-type 可以不用填 -->
+	
+ 	<util:list id="strArray">
+		<description>字符串数组</description>
+		<value>wenzhou</value>
+		<value>zhanjiang</value>
+	</util:list>
+
+	<util:list id="list" list-class="java.util.ArrayList" value-type="java.lang.Integer">
+		<description>list</description>
+		<value>1</value>
+		<value>2</value>
+	</util:list>
+
+	<util:set id="set" set-class="java.util.HashSet" value-type="java.lang.String">
+		<value>abc</value>
+		<value>bcd</value>
+	</util:set>
+
+	<util:map id="map" map-class="java.util.HashMap" 
+		key-type="java.lang.String" value-type="java.lang.Integer">
+		<description>map</description>
+		<entry>
+			<!-- key 也是一种类型，必须用Object来对待 -->
+			<key>
+				<value>min</value>
+			</key>
+			<value>1</value>
+		</entry>
+		<entry>
+			<key>
+				<value>max</value>
+			</key>
+			<value>200</value>
+		</entry>
+	</util:map>
+
+	<util:properties id="props">
+		<prop key="min">1</prop>
+		<prop key="max">300</prop>
+	</util:properties>
+
+	<!-- 复合类型bean -->
+	<bean id="compositeType" class="com.hua.bean.CompositeType">
+		<property name="array" ref="strArray" />
+		<property name="list" ref="list" />
+		<property name="set" ref="set" />
+		<property name="map" ref="map" />
+		<property name="props" ref="props" />
+	</bean>
+
+</beans>

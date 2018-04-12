@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	" default-lazy-init="true">
+	
+	<!-- 通过配置bean的方式启动 aop -->
+	<bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator" />
+
+	<!-- 声明一个业务bean -->
+	<bean id="userBusiness" class="com.hua.service.impl.UserBusinessImpl" />
+
+	<!-- 声明通知 -->
+	<bean id="userBeforeAdvice" class="com.hua.advice.UserBeforeAdvice" />
+	<bean id="userReturningAdvice" class="com.hua.advice.UserReturningAdvice" />
+	<bean id="userAfterThrowingAdvice" class="com.hua.advice.UserAfterThrowingAdvice" />
+	<bean id="userAroundAdvice" class="com.hua.advice.UserAroundAdvice" />
+
+	<!-- 声明切点 -->
+	<bean id="userPointcut" class="com.hua.pointcut.UserPointcut" />
+
+<!-- 不包装切点的，将对代理对象的所有方法产生作用 (未起作用，需要逐个分别 包转 切入点/通知 构成一个通知) -->
+
+	<!-- 包装通知，指定切点 -->
+	<bean id="matchBeforeAspect" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="pointcut" ref="userPointcut" />
+		<property name="advice" ref="userBeforeAdvice" />
+	</bean>
+	
+	<bean id="matchAfterThrowingAspect" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="pointcut" ref="userPointcut" />
+		<property name="advice" ref="userAfterThrowingAdvice" />
+	</bean>
+	
+	<bean id="matchAfterReturningAspect" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="pointcut" ref="userPointcut" />
+		<property name="advice" ref="userReturningAdvice" />
+	</bean>			
+
+	<bean id="matchAroundAspect" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="pointcut" ref="userPointcut" />
+		<property name="advice" ref="userAroundAdvice" />
+	</bean>		
+
+	<!-- 使用ProxyFactoryBean 产生代理对象 -->
+	<bean id="userBusinessProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- 代理对象所实现的接口 ，如果有接口可以这样设置 -->
+		<property name="proxyInterfaces">
+			<value>com.hua.service.UserBusiness</value>
+		</property>
+		<!-- 设置目标对象 -->
+		<property name="target" ref="userBusiness" />
+		<!-- 代理对象所使用的拦截器 -->
+		<property name="interceptorNames">
+			<list>
+				<value>matchBeforeAspect</value>
+				<value>matchAfterReturningAspect</value>
+			 	<value>matchAfterThrowingAspect</value>
+				<value>matchAroundAspect</value>
+			</list>
+		</property>
+	</bean>
+</beans>

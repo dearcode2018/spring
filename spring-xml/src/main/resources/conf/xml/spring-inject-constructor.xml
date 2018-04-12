@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+	
+	<!-- 
+		spring 依赖注入有多种形式， 通过 xml 进行IOC设置的形式有
+		方式1: 构造方法注入
+		方式2: setter方法注入
+		方式3: 静态工厂方法注入
+		方式4: 实例工厂方法注入
+	
+		工厂方法注入 与 setter方法注入很相似.
+		实例工厂的意思是获取对象实例的方法不是静态的，所以你需要首先new工厂类，再调用普通的实例方法	
+	
+	 -->
+
+	<!-- 
+		构造方法注入，给构造方法传值，若是调用无参构造，则不用写constructor-arg配置.
+		
+		方法1: 根据索引赋值，索引从0开始
+		
+		方法2: 根据参数类型赋值
+		
+		方法3: 根据参数名称赋值 (推荐使用)
+		
+		方法4: 直接顺序给参数赋值
+	
+		方法评估
+		方法1 若构造方法参数位置变化，则需调整索引的值.
+		方法2 在构造方法出现多个相同类型的参数时，容易混淆，不明确是给那个参数赋值.
+		推荐使用方法3，因为构造方法的参数位置切换，就无需求修改配置索引值，稳定性
+		较高.
+		方法4也是直接绑定参数的顺序，在发生参数位置变化时，需调整索引的值.
+	 -->
+
+	<!-- 方法1: 根据索引赋值，索引从0开始 -->
+	<bean id="userIndex" class="com.hua.entity.spring.User">
+		<constructor-arg index="0" value="Zhangsan" />
+		<constructor-arg index="1" value="123456" />
+		<constructor-arg index="2" value="true" />
+	</bean>	
+
+	<!-- 方法2: 根据参数类型赋值 -->
+	<bean id="userType" class="com.hua.entity.spring.User">
+		<constructor-arg type="java.lang.String"  value="Lisi" />
+		<constructor-arg type="java.lang.String"  value="89745" />
+		<!-- 可以直接使用基本类型，也可以用其包装类替代 -->
+		<constructor-arg type="boolean"  value="true" />
+	</bean>	
+	
+	<!-- 方法3: 根据参数名称赋值 (推荐使用) -->
+	<bean id="userName" class="com.hua.entity.spring.User">
+		<constructor-arg name="username" value="Wangwu" />
+		<constructor-arg name="password" value="025896" />
+		<constructor-arg name="valid" value="true" />
+	</bean>		
+
+
+	<!-- 方法4: 直接顺序给参数赋值 -->
+	<bean id="userOrder" class="com.hua.entity.spring.User">
+		<constructor-arg value="Zhaoliu" />
+		<constructor-arg value="768313" />
+		<constructor-arg value="false" />
+	</bean>	
+
+
+
+
+</beans>

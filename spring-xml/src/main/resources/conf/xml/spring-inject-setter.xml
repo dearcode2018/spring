@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- 
+		spring 依赖注入有多种形式， 通过 xml 进行IOC设置的形式有
+		方式1: 构造方法注入
+		方式2: setter方法注入
+		方式3: 静态工厂方法注入
+		方式4: 实例工厂方法注入
+	
+		工厂方法注入 与 setter方法注入很相似.
+		实例工厂的意思是获取对象实例的方法不是静态的，所以你需要首先new工厂类，再调用普通的实例方法	
+	
+	 -->
+
+
+	<!-- 
+		set方法（对象需要提供无参构造方法）
+		property标签，指定属性进行注入.	
+	 -->
+
+	<!-- setter方法注入 -->
+	<bean id="userSetter" class="com.hua.entity.spring.User">
+		<description>User对象</description>
+		<property name="oid" value="2008" />
+		<property name="username" value="zhangsan" />
+		<property name="nickname" value="张三" />
+		<property name="password" value="123456" />
+		<property name="valid" value="true" />
+		<property name="lastLoginIp" value="192.168.5.62" />
+	</bean>		
+
+	<!-- 装配null值 -->
+	<bean id="userAssembleNull" class="com.hua.entity.spring.User">
+		<description>User对象</description>
+		<property name="oid" value="2008" />
+		<property name="username" value="zhangsan" />
+		<property name="nickname">
+			<null />
+		</property>
+		<property name="password" value="123456" />
+		<property name="valid" value="true" />
+		<property name="lastLoginIp" value="192.168.5.62" />
+	</bean>		
+
+
+
+
+
+
+</beans>

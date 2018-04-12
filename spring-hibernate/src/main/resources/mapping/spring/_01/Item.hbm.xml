@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+
+	<class name="com.hua.orm.entity.m2o.Item" table="item">
+		<id name="id" type="java.lang.String">
+			<column name="id" >
+				<comment>唯一标识符</comment>
+			</column>
+			<!-- 本地(数据库自身)生成方式 -->
+			<generator class="native" />		
+		</id>	
+		<property name="name" type="java.lang.String" >
+			<column name="name" length="128" not-null="false">
+				<!-- 列注释 -->
+				<comment>定单名称</comment>
+			</column>
+		</property>
+		<property name="orderTs" type="java.util.Date">
+			<column name="orderTs" not-null="false">
+				<!-- 列注释 -->
+				<comment>下单日期 yyyy-MM-dd</comment>
+			</column>
+		</property>
+		<property name="monetary" type="java.lang.Double" >
+			<column name="monetary" not-null="false">
+				<!-- 列注释 -->
+				<comment>消费金额</comment>
+			</column>
+		</property>
+		<property name="remark" type="java.lang.String" >
+			<column name="remark" length="128" not-null="false">
+				<!-- 列注释 -->
+				<comment>备注</comment>
+			</column>
+		</property>
+		<many-to-one name="custom" class="com.hua.orm.entity.m2o.Custom">
+			<column name="customId"></column>
+		</many-to-one>				
+	</class>
+	
+
+
+
+
+
+
+
+
+
+
+
+</hibernate-mapping>

@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hua</groupId>
+		<artifactId>spring-entire</artifactId>
+		<version>0.0.1</version>
+	</parent>	
+	<artifactId>spring-web</artifactId>
+	<packaging>jar</packaging>
+	<name>spring-web</name>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<web.version>0.0.1</web.version>
+		<spring.version>0.0.1</spring.version>
+		<xstream.version>1.4.8</xstream.version>								
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.hua</groupId>
+			<artifactId>web</artifactId>
+			<version>${web.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hua</groupId>
+			<artifactId>spring</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>${xstream.version}</version>
+		</dependency>			
+		
+	</dependencies>
+</project>

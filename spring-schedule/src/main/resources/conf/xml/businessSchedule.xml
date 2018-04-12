@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+<!-- 凌晨3点 批量注册/发送邮件 -->
+<bean id="merchantBatchRegister" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail">
+        <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="concurrent" value="false"/>
+            <property name="targetObject" ref="merchantService"/>
+            <property name="targetMethod" value="doBatchMerchantRegister"/>
+        </bean>
+    </property>
+    <!-- 0-每天，分钟 (0-59)，小时(0-23) -->
+    <property name="cronExpression" value="0 45 11 * * ?"/>
+</bean>
+
+<bean id="unlockUsersTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail">
+        <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="concurrent" value="false"/>
+            <property name="targetObject" ref="sysService"/>
+            <property name="targetMethod" value="txUnlockUsers"/>
+        </bean>
+    </property>
+    <property name="cronExpression" value="0 0/10 * * * ?"/>
+</bean>
+
+<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+      <property name="triggers">
+		<list>
+			<!--  <ref bean="merchantBatchRegister" /> -->
+			<ref bean="unlockUsersTrigger" />
+			<ref bean="overdueUserHandle" />
+		</list>
+      </property>
+      <property name="startupDelay" value="6"/>
+</bean>
+
+<bean id="overdueUserHandle" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail">
+        <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="concurrent" value="false"/>
+            <property name="targetObject" ref="userService"/>
+            <property name="targetMethod" value="txOverdueUserHandle"/>
+        </bean>
+    </property>
+    <!-- 每年 9月1日 3时0分0秒 ( 0 0 3 1 9 ? ) -->
+    <property name="cronExpression" value="0 0 3 1 9 ?"/>
+</bean>
+
+</beans>

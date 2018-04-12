@@ -1,0 +1,333 @@
+
+基础要点
+1）Spring优点：
+① 低侵入式设计，低代码污染；
+② 独立于各种应用服务器，真正实现"一次编写，到处运行"的承若；
+③ 依赖注入（Dependency Injection）机制降低业务对象交换的复杂性；
+④ 开发者可以自由选用Spring框架的部分或全部，并不完全依赖Spring组件
+2）Spring基础
+① IoC: Inversion of Control 反转控制
+② DI: Dependency Injection 依赖注入
+③ 反转控制 也称 依赖注入
+④ 反转控制（依赖注入）
+//将JavaBean需要的对象通过配置文件加载进来
+⑤ Spring提供2种装配Bean的容器：
+A org.springframework.beans.factory.BeanFactory
+B org.springframework.context.ApplicationContext
+所有的Bean都应该通过容器装配，而容器也知道自己都装配了哪些Bean
+3）ApplicationContext与BeanFactory都是接口，ApplicationContext extends BeanFactory，它增强了BeanFactory的功能
+4）POJO：Plain Old Java Object
+Bean容器能够加载的对象并不一定是严格遵循JavaBeans规范的Java类，任何可实例化的类都
+可以通过Spring Bean容器加载进来。通常称这些类为POJO
+5）Spring给出一些BeanFactory的实现类，其中最为常用的是XmlBeanFactory
+org.springframework.beans.factory.xml.XmlBeanFactory
+① 通过文件系统
+String abstractPath = "...";
+Resource res = new FileSystemResource(abstractPath);
+BeanFactory factory = new XmlBeanFactory(res);
+② 通过类路径
+/* classpath路径下 */
+String classPath = "";
+Resource res = new ClassPathResource(classPath);
+BeanFactory factory = new XmlBeanFactory(res);
+③ 通过ApplicationContext加载
+org.springframework.context.support.ClassPathXmlApplicationContext
+ApplicationContext context = new ClassPathXmlApplicationContext(
+new String[] {"applicationContext.xml", "applicationContext-part2.xml"});
+BeanFactory factory = context;
+///
+public static BeanFactory getBeanFactory() {
+	final String resourcePath = "spring-config.xml";
+ApplicationContext context = new ClassPathXmlApplicationContext(resourcePath);
+	return context;
+	}
+6）
+7）加载Bean的IoC容器：
+ApplicationContext/BeanFactory
+8）容器_3种装配Bean的方式：
+构造方法、setter方法、自动装配
+9）使用Bean必须向容器注册，注册是通过在配置文件中加入bean声明
+10）
+///
+注入
+1）
+2）注入方式
+① 构造方法
+无需提供无参构造方法
+示例:
+<bean id="man" class="com.jun.abc.d.spr.Man">
+<constructor-arg index="0" type="java.lang.String" value="lisi" />
+<constructor-arg index="1" type="boolean" value="true" />
+</bean>
+/* Man.class 构造方法 */
+public Man(String name, boolean sex) {
+	super();
+	this.name = name;
+	this.sex = sex;
+	}
+
+② set方法（对象需要提供无参构造方法）
+property标签，指定属性进行注入.
+③ 
+3）
+4）
+5）
+///
+资源路径
+1）路径类型
+相对路径、绝对路径
+类路径、服务器路径
+2）地址前缀
+/* 类路径（相对于类的根路径） */
+classpath:
+或
+classpath:/
+/* 文件系统 */
+file:
+或
+file:/
+/* ftp服务器 */
+ftp://
+/* web服务器 */
+http://
+3）类路径
+/* 搜索第一个 */
+classpath:
+/* 搜索所有 */
+classpath*:
+4）
+5）
+///
+Bean管理关键类
+1）BeanFactory
+org.springframework.beans.factory.BeanFactory
+2）XmlBeanFactory
+org.springframework.beans.factory.xml.XmlBeanFactory
+3）ApplicationContext
+org.springframework.context.ApplicationContext
+4）ClassPathXmlApplicationContext
+org.springframework.context.support.ClassPathXmlApplicationContext
+5）Resource
+org.springframework.core.io.Resource
+6）FileSystemResource
+org.springframework.core.io.FileSystemResource
+7）ClassPathResource
+org.springframework.core.io.ClassPathResource
+8）BeanDefinition
+org.springframework.beans.factory.config.BeanDefinition
+///
+IoC
+///
+1）
+2）
+3）IoC概念
+1.IoC容器是用来管理对象依赖关系的，对IoC容器的使用者来说，我们经常接触的BeanFactory和ApplicationContext都可以看成是IoC容器的具体表现形式。如果深入spring看，IoC容器代表一系列功能各异的容器产品，只是容器的大小和功能有各自的特点
+2.就像商品需要有功能说明书一样，同样，作为IoC容器，也需要为它的具体实现指定基本的功能规范，这个功能规范设计表现为接口类BeanFactory，它体现了spring为提供给用户使用的IoC容器所设定的最基本功能规范，所以BeanFactory接口在继承体系中是最基本的接口类。
+3.在这些spring提供的基本IoC容器的接口定义和实现基础上，spring通过定义BeanDefinition来管理基于spring的应用中的各种对象以及它们之间的依赖关系，这些BeanDefinition就像是容器里装的水，有了这些水，容器才能发挥作用。依赖反转功能都是围绕对这个BeanDefinition的处理上完成的。
+org.springframework.beans.factory.config.BeanDefinition
+4.在spring中，所有Bean都是由BeanFactory来管理的，FactoryBean是一个能产生或者修饰对象生成的工厂Bean。
+5.XmlBeanFactory是一个可以读取XML文件方式定义的BeanDefinition的IoC容器，构造XmlBeanFactory时，需要指定BeanDefinition的信息来源，而这个信息来源需要封装成spring中的Resource类来给出。Resource是用来封装IO操作的类。可以用ClassPathResource来构造Resource，然后作为参数传递XmlBeanFactory。编程时如下使用建立IoC容器：
+XmlBeanFactory factory=new XmlBeanFactory(new classPathResource("applicationContext.xml"));
+ApplicationContext是一个高级形态意义IoC容器，与简单的BeanFactory相比，对它的使用是一种面向框架的使用风格，所以一般建议在开发应用时使用ApplicationContext作为IoC容器的基本形式。
+6.IoC容器的初始化包括BeanDefinition的Resource定位，载入和注册这三个基本的过程。BeanDefinition的资源定位ResourceLoader通过统一的Resource接口来完成，比如在类路径中的Bean定位由ClassPathResource来定位。这个过程类似于容器寻找数据的过程，就像用水桶装水得先找到水源。依赖注入的过程是用户第一次向IoC容器索要Bean时触发的。也可以在BeanDefinition信息中通过控制lazy-init属性来让容器完成对Bean的预实例化。
+4）
+5）
+6）
+///
+bean标签
+1）class：JavaBean类名
+2）id：JavaBean在BeanFactory中的唯一标识，代码中通过BeanFactory获取JavaBean实例需以此作为索引名称.
+说明：同类的bean可以有多个，通过id来区分.
+3）延迟加载
+spring容器启动之后是否实例化指定的bean.
+lazy-init=false spring容器启动之后实例化此bean
+（默认值，即默认启动后实例化）
+lazy-init=true spring容器启动之后不实例化此bean
+4）scope：singleton/prototype/request/session/global sessioin/application/自定义
+prototype的bean在创建后即脱离BeanFactory的维护，所以只能调用init-method指定的方法，而不能调用destroy-method指定的方法。
+5）abstract：true/false
+6）parent：定义一个模板
+7）autowired：自动装配模式（5种）
+8）dependency-check：
+9）lazy-init：true/false
+延迟加载 仅在 bean单例模式下起作用。
+bean初始化：
+① 第一次加载该bean时初始化
+② 容器初始化时加载所有bean
+10）init-method：初始化方法
+11）destroy-method：销毁方法
+12）factory-bean：通过BeanFactory方法创建Bean
+13）factory-method：设定工厂类的工厂方法。
+14）depends-on:Bean依赖关系
+///
+bean标签所有属性（在标签的所有属性，应该先写该bean对象的类型，即先写class,在写id...）
+class/id/name/scope/auwire.
+///
+bean下级标签
+1）property设置一个属性。bean标签下可以有0-N个property标签。
+<property name="" value="" />
+property标签针对Bean对象指定属性而存在，如果Bean对象的某个属性是引用类型(除了String)，则可以写内部Bean或者引用外部的Bean:
+内部Bean：（内部Bean没有名字）
+<bean class="">
+	<property name="" value=""></property>
+</bean>
+引用外部Bean：
+<bean id="外部Bean的Id" class="">
+	<property name="" value=""></property>
+</bean>
+如果Bean对象的属性的类型是Map，则：
+<property name="">
+	<map>
+		<entry key="">
+			<value>val...</value>
+		</entry>
+<entry key="">
+			<value>val...</value>
+		</entry>
+		...
+	</map>
+</property>
+装配null
+<property>
+	<null/>
+</property> 
+总之，bean标签下的property标签是Bean类实例化后，实例对象的属性的值。
+2）bean装配方式：
+构造方法、setter方法、自动装配。其中使用setter方法装配bean最常用。
+3）setter方法可以装配基本类型、Bean类型、内部bean类型、集合类型、空类型。
+Bean类型属性：该属性的类型是个javaBean，并且这个javaBean必须已经在Spring中注册过了。
+字面类型：8种基本类型及其包装类、String类。
+4）基本类型装配：
+字面类型：8种基本类型及其包装类、String类。
+方式一：
+<property name="" value="">
+</property>
+方式二：
+<property name="">
+	<value>val...</value>
+</property>
+5）装配bean类型属性：
+只有通过配置文件向容器注册的bean才能通过注入机制设置到其它bean的属性上。
+使用<ref>子元素或ref属性设置。
+示例：
+<beans>
+<bean id="data" class="org.apache.commons.dbcp.BasicDataSource">
+<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+ 	<property name="url" value="jdbc:mysql:///j2ee"/>
+ 	<property name="username" value="root" />
+ 	<property name="password" value="root" />
+</bean>
+<bean id="course" class="bean.CourseBean">
+<property name="dataSource" ref="data"/>
+  //由于是bean，所以使用ref
+</bean>
+</beans>
+6）Spring支持以下四种集合的装配：
+<list>－－java.util.List
+<set>－－java.util.Set
+<map>－－java.util.Map
+<props>－－java.util.Properties
+7）内部Bean
+属性类型不是基本类型，也不是集合，而是其他类型。
+<bean id="outer" class="...">
+ <property name="target">
+  <bean class="com.mycompany.PersonImpl">
+   <property name="name">
+    <value>Tony</value>
+   </property>
+  </bean>
+ </property>
+</bean>
+8）
+///
+bean知识点
+1）初始化与清理
+初始化：org.springframework.beans.factory.InitializingBean  void afterPropertiesSet()
+清理：
+org.springframework.beans.factory.DisposablBean   void destroy()
+2）property标签之下：
+bean/ref/idref/value/null/list/set/map/props  // 0-1个
+3）集合list/set标签之下：
+bean/ref/idref/value/null/list/set/map/props    // 0-N个
+4）map entry标签下：
+<key></key>或<key-ref></key-ref>
+bean/ref/idref/value/null/list/set/map/props
+5）props
+<prop key="">value</prop>
+6）
+///
+Setter注入
+1）通过反射调用setXx(...),将配置中设置的值注入到setXx方法的参数中，然后执行此setXx方法。一般来说，这是不依赖类的属性存在，但是为了规范，需要有类的属性存在。
+例如：String id;
+public void setId(String id) {
+/* 反射调用setXx方法，方法的参数获得容器配置中的值，而类型的属性需要通过以下代码才能获取值，而不是自动获取 */
+ this.id = id;
+}
+2）
+3）
+4）
+///
+setter装配
+1）
+<property name="" value="" />
+<property name="" ref="" />
+<property name="">
+	<value></value>
+</property>
+2）NULL
+<property name="">
+	<null />
+</property>
+3）
+<property name="">
+	<list>
+		<value></value>
+		<ref bean="" />
+	</list>
+</property>
+4）
+<proerty name="">
+	<set>
+		<value></value>
+		<ref bean="" />
+	</set>
+</property>
+5）
+<property name="">
+	<map>
+		<entry>
+			<key></key>
+			<value></value>
+		</entry>
+		...
+		<entry>
+		</entry>
+	</map>
+</property>
+6）
+<property name="">
+	<props>
+		<prop key="">
+			value...
+		</prop>
+		...
+	</props>
+</property>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

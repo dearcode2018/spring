@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- realm (授权)范围/领域 -->
+	<!-- 指定Shiro验证用户登录的类 -->
+	<bean id="myRealm" class="com.hua.shiro.MyRealm" />
+
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- 定义单个realm，使用realms定义多个realm -->
+		<property name="realm" ref="myRealm" />
+	</bean>
+
+	<!-- ShiroFilter 过滤器 bean id对应 web.xml中配置的代理Shiro过滤器 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- 安全管理器 -->
+		<property name="securityManager" ref="securityManager" />
+		<!-- 指定登录url -->
+		<property name="loginUrl" value="/views/login.html" />
+		<!-- 登录成功后 跳转到指定的页面 -->
+		<property name="successUrl" value="/views/login-success.html" />
+		<!-- 访问未授权的资源 -->
+		<property name="unauthorizedUrl" value="/views/unauthorized.html" />
+		
+		<!-- 过滤链 定义 -->
+		<property name="filterChainDefinitions">
+			<!-- 
+			anon: 对应的过滤器是空的，什么都不做
+			authc: 该过滤器下的页面必须经过验证之后才能访问
+			perms["user:add:*,user:modify:*"] 多个全权限用双引号括起来，用逗号隔开
+			例如 我有权限进入的你家，但不一定有权限进入小区，因此需要多个权限
+			同时满足才能完成一个事情.
+			 -->
+			<value>
+				/api/sys/login=anon
+				/api/sys/listUser**=authc,perms["admin1:manage1"]	
+				/views/login.html=anon
+				/views/login-success.html=authc
+			</value>
+		</property>			
+	</bean>
+
+
+
+</beans>

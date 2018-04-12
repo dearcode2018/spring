@@ -1,0 +1,21 @@
+java.lang.AbstractMethodError: com.mysql.jdbc.Connection.isValid(I)Z
+1) 场景: 使用mysql，由于mysql版本较高，其5.08的jar包无法支持，需要
+使用更高版本的jar例如mysql-5.1.8.jar 才能解决此异常
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

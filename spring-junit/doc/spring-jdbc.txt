@@ -1,0 +1,25 @@
+
+private JdbcTemplate jdbcTemplate;   
+
+//NamedParameterJdbcTemplate对JdbcTemplate封装，增加了命名参数特性   
+private NamedParameterJdbcTemplate namedParameterJdbcTemplate;   
+
+//SimpleJdbcTemplate对JdbcTemplate封装,某些特性要在java5以上才工作   
+private SimpleJdbcTemplate simpleJdbcTemplate;   
+   
+//简化插入数据操作   
+private SimpleJdbcInsert inserActor;   
+
+
+//Map namedParameter = Collections.singletonMap("first_name",firstName);   
+//还有一种Bean封装的方式
+//SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(exampleAct
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping xmlns="http://castor.exolab.org">
+	<class name="com.hua.bean.xml.Customer">
+		<description>客户信息</description>
+		<map-to xml="customer" />
+
+		<field name="id" type="string" required="true">
+			<bind-xml name="id" node="attribute" />
+		</field>
+		
+		<field name="name" type="string" required="true">
+			<bind-xml name="name" node="attribute" />
+		</field>
+		
+		<field name="gender" type="string">
+			<bind-xml name="gender" node="attribute" />
+		</field>
+		
+		<field name="phoneNumber" type="string">
+			<bind-xml name="phoneNumber" node="attribute" />
+		</field>
+		
+		<!-- 地址 -->
+		<field name="address" type="com.hua.bean.xml.Address">
+			<bind-xml name="address" node="element">
+				<class name="com.hua.bean.xml.Address">
+					<map-to xml="address" />
+					<!-- 首要地址 -->
+					<field name="primaryAddresses" type="com.hua.bean.xml.PrimaryAddress" 
+						collection="arraylist">
+						<description>首要地址</description>
+						<bind-xml name="primaryAddresses" node="element">
+							<class name="com.hua.bean.xml.PrimaryAddress">
+								<!-- 无法实现嵌套集合的功能 -->
+								<map-to xml="primaryAddress" /> 
+								<field name="postalCode" type="string">
+									<bind-xml name="postalCode" node="element" />
+								</field>
+								<field name="addressLine" type="string">
+									<bind-xml name="addressLine" node="element" />
+								</field>
+							</class>
+						</bind-xml>
+					</field>
+					<!-- 订单地址 -->
+					<field name="billingAddresses" type="com.hua.bean.xml.BillingAddress"
+						collection="arraylist">
+						<description>订单地址</description>
+						<bind-xml name="billingAddresses">
+							<class name="com.hua.bean.xml.BillingAddress">
+								<map-to xml="billingAddresse" />
+								<field name="receiver" type="string">
+									<bind-xml name="receiver" node="element" />
+								</field>							
+								<field name="postalCode" type="string">
+									<bind-xml name="postalCode" node="element" />
+								</field>
+								<field name="addressLine" type="string">
+									<bind-xml name="addressLine" node="element" />
+								</field>
+							</class>
+						</bind-xml>
+					</field>					
+					<field name="updateDt" type="date">
+						<bind-xml name="updateDt" node="attribute" />
+					</field>
+					<field name="remark" type="string">
+						<bind-xml name="remark" node="attribute" />
+					</field>
+				</class>
+			</bind-xml>
+		</field>
+		
+		<!-- 备注 -->
+		<field name="remark" type="string">
+			<bind-xml name="remark" node="element" />
+		</field>
+	</class>
+
+</mapping>

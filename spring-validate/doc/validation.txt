@@ -1,0 +1,66 @@
+javax.validation
+
+javax.validation.Valid
+
+参考资料: 
+http://blog.sina.com.cn/s/blog_a3d2fd2d0101hyu7.html
+
+约束: 
+javax.validation.constraints.NotNull 
+javax.validation.constraints.Null
+验证字段: 引用类型
+说明: 注解元素必须是非空或空
+
+javax.validation.constraints.Digits
+验证字段: byte / short / int / long及其包装类型、BigDecimal、BigInteger、String
+说明: 验证数字构成是否合法
+
+javax.validation.constraints.Future
+javax.validation.constraints.Past
+验证字段: java.util.Date、java.util.Calendar
+说明: 验证是否在当前系统时间之前/之后
+
+javax.validation.constraints.Max
+javax.validation.constraints.Min
+验证字段: byte / short / int / long及其包装类型、BigDecimal、BigInteger、String
+说明: 验证值是否小于等于或大于等于指定的整数值
+
+javax.validation.constraints.Pattern
+验证字段: String
+说明: 验证字符串是否匹配指定的正则表达式
+属性: 
+
+javax.validation.constraints.Size
+验证字段: String / Collection / Map / 数组
+说明: 验证元素的大小是否在指定的范围内
+
+javax.validation.constraints.DecimalMax
+javax.validation.constraints.DecimalMin
+验证字段: byte / short / int / long及其包装类型、BigDecimal、BigInteger、String
+说明: 验证值是否小于等于最大指定小数值或大于等于最小指定小数值
+
+javax.validation.constraints.
+验证字段: 
+说明: 
+javax.validation.constraints.
+验证字段: 
+说明: 
+javax.validation.constraints.
+验证字段: 
+说明: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,69 @@
+【项目信息】
+项目名称 : spring-aop
+中文名称 : spring框架 -aop 面向切面编程
+项目版本 : version 1.0
+
+主要技术 : aop原理、aop技术、aop使用
+
+项目描述 : aop (aspect oriented programming)
+
+项目备注 : 
+
+【项目规划】
+
+1) spring - aop 3种实现方式
+A. aop接口
+在spring-aop项目中体现出来
+利用spring aop 接口实现aop功能，自定义通知来提供spring aop机制识别，
+主要接口: 前置通知(MethodBeforeAdvice) 返回通知(AfterReturningAdvice)
+环绕通知(MethodInterceptor) 异常通知(ThrowsAdvice)
+后置通知(AfterAdvice，无论前方法是否成功或失败返回)
+
+MethodInterceptor 有spring提供的接口，也有 aopalliance提供的接口
+
+B.xml配置
+在spring-aop-xml项目中体现出来
+业务类、切面类(将定义所有的通知)、xml配置(aop-config)
+
+C.注解方式
+在spring-aop-anno项目中体现出来
+使用aspectj提供的注解，配合spring的相关功能来实现.
+业务类/切面类(@Component @Aspect) /xml配置(启动aop 注解 <aop:aspectj-autoproxy />)
+
+2)
+
+3)
+
+4)
+
+5)
+
+通知: 故事内容 连接点: 故事时间
+切入点: 故事地点
+以上构成切面，
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

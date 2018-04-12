@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+	" default-lazy-init="true">
+	
+	<!-- 所有方法安全-检查 -->
+	<security:global-method-security pre-post-annotations="enabled" />	
+	
+	<!-- 该路径下的资源不过滤 -->
+	<security:http pattern="/views/**" security="none" />
+	<security:http pattern="/front/**" security="none" />
+
+	<!-- 自定义过滤器 -->
+	<bean id="securityInterceptor" class="com.hua.security.MySecurityInterceptor">
+		<!-- 用户拥有的权限 -->
+		<property name="authenticationManager" ref="authenticationManager" />
+		
+		<!-- 用户是否拥有所请求资源的权限 -->
+		<property name="accessDecisionManager" ref="accessDecisionManager" />
+		
+		<!-- 资源和权限的关系 -->		
+		<property name="securityMetadataSource" ref="invocationSecurityMetadataSource" />
+	</bean>
+	
+	<!-- 鉴权管理器; 认证管理器，实现用户认证的入口，主要实现 UserDetailsService 接口即可 -->
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider user-service-ref="userDetailsService">
+			<!-- 加密 -->
+			<security:password-encoder ref="md5PasswordEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	<!-- 用户拥有的权限 -->
+	<bean id="userDetailsService" class="com.hua.security.MyUserDetailsService">
+	</bean>
+	
+	<!-- 用户是否拥有所请求资源的权限; 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源 -->
+	<bean id="accessDecisionManager" class="com.hua.security.MyAccessDecisionManager" />
+	
+	<!-- 资源和权限的关系; 资源源数据定义，即定义某一资源可以被哪些角色访问 -->		
+	<bean id="invocationSecurityMetadataSource" class="com.hua.security.MyInvocationSecurityMetadataSource">
+	</bean>
+	
+	<!-- http 验证 -->
+	<security:http use-expressions="true" auto-config="true">
+		<security:form-login/>
+		<security:logout/>
+		<!-- 记住我 -->
+		<security:remember-me/>
+		<!-- 会话管理 -->
+		<security:session-management invalid-session-url="/views/session-timeout.html">
+			<!-- 并发控制 -->
+			<security:concurrency-control max-sessions="5" error-if-maximum-exceeded="true"/>
+		</security:session-management>
+		<!-- 自定义过滤器 FILTER_SECURITY_INTERCEPTOR 在自定义过滤器之前 -->
+		<security:custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="securityInterceptor" />
+	</security:http>	
+	
+	
+	<!-- 密码加密 -->
+	<bean id="md5PasswordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+	
+</beans>

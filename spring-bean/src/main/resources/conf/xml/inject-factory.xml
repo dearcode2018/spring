@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+
+
+	
+	<!-- 
+		spring 依赖注入有多种形式， 通过 xml 进行IOC设置的形式有
+		方式1: 构造方法注入
+		方式2: setter方法注入
+		方式3: 静态工厂方法注入
+		方式4: 实例工厂方法注入
+	
+		工厂方法注入 与 setter方法注入很相似.
+		实例工厂的意思是获取对象实例的方法不是静态的，所以你需要首先new工厂类，再调用普通的实例方法
+	 -->
+
+	<!-- 	方式3: 静态工厂方法注入 -->
+	<!-- 自定义spring工厂 之中某个工厂用例 此时的factory-method是静态方法 -->
+	<bean id="getLoginBeanStaticFactory" class="com.hua.spring.factory.SpringFactory" factory-method="getLoginBeanStatic" />
+	
+	<!-- 由上面的工厂方法的 某个工厂方法 来生产所需的对象，然后通过setter来注入 -->
+	<bean id="loginBeanFactoryOfStatic" class="com.hua.bean.LoginBeanFactory">
+		<!-- 使用指定工厂的指定方法来实现注入 -->
+		<property name="loginBean" ref="getLoginBeanStaticFactory" />
+	</bean>
+	
+	<!-- 方式4: 实例工厂方法注入 -->
+	<!-- 工厂实例 - 先构造工厂对象 -->
+	<bean id="springFactory" class="com.hua.spring.factory.SpringFactory" />
+	<!-- 使用上一行构造出来的工厂对象，进一步调用指定的方法 此时的factory-method是实例方法 -->
+	<bean id="getLoginBeanFactory" factory-bean="springFactory" factory-method="getLoginBean" />
+		
+	<bean id="loginBeanFactory" class="com.hua.bean.LoginBeanFactory">
+		<!-- 使用指定工厂的指定方法来实现注入 -->
+		<property name="loginBean" ref="getLoginBeanFactory" />
+	</bean>	
+	
+</beans>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  -->
+<customer id="2001" gender="Female" firstname="Li" 
+	lastname="MeiHua" phoneNumber="15018752632">
+	
+	<!-- 地址对象 -->
+	<address updateDt="2015-05-02 09:54:36" remark="亚洲地区">
+		<!-- 首要地址 -->
+		<primaryAddresses>
+			<primaryAddress>
+				<postalCode>086436</postalCode>
+				<addressLine>新疆自治区乌鲁木齐市五山区天长路22号</addressLine>
+			</primaryAddress>
+			
+			<primaryAddress>
+				<postalCode>126733</postalCode>
+				<addressLine>广东省广州市天河区平云路11号</addressLine>
+			</primaryAddress>
+		</primaryAddresses>
+
+		<!-- 订单地址 -->
+		<billingAddresses>
+			<billingAddress>
+				<receiver>刘雨</receiver>
+				<postalCode>986477</postalCode>
+				<addressLine>江西省上饶市天水区青山路19号</addressLine>
+			</billingAddress>	
+				
+			<billingAddress>
+				<receiver>王洁</receiver>
+				<postalCode>566403</postalCode>
+				<addressLine>广西省玉林市玉山区广平路13号</addressLine>
+			</billingAddress>		
+			
+			<billingAddress>
+				<receiver>赵备</receiver>
+				<postalCode>236431</postalCode>
+				<addressLine>广东省广州市越秀区清水路17号</addressLine>
+			</billingAddress>							
+		</billingAddresses>
+
+	</address>
+
+</customer>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	" default-lazy-init="true">
+	
+	<!-- 声明一个业务bean -->
+	<bean id="userBusiness" class="com.hua.service.impl.UserBusinessImpl" />
+
+	<!-- 声明切面 -->
+	<bean id="fullAspect" class="com.hua.aspect.UserFullAspect" />
+	
+	<!-- aop 配置 -->
+	<aop:config>
+		<!-- 通知，在外部声明通知，必须存在一个通知bean -->
+		<!-- <aop:advisor id="userAfterAdvice" advice-ref="" pointcut-ref="userBusinessCut" />-->		
+		<!-- 切入点可以在切面内、外进行声明，然后在切面内部引用即可 -->
+	<!-- 	<aop:pointcut id="userBusinessCut" expression="execution(* com.hua.service.*.*(..))" /> -->
+		<!-- 逻辑运算符 使用&&会报错，使用 and|or|not 就可以，而在注解中使用and就会报错，需要使用&& -->
+		<aop:pointcut id="userBusinessCut" expression="execution(* com.hua.service.*.*(com.hua.bean.User,..)) and args(user,..)" />
+		<!-- 切面 -->
+		<aop:aspect ref="fullAspect">
+			<aop:before pointcut-ref="userBusinessCut" method="doBefore"/>
+			<!-- around 可以覆盖 before / returning / throwing / after 场景，因此，around 要独立使用，尽量不要
+			合在一起使用，不然很难区分各个通知的职责
+			 -->
+	<!-- <aop:around pointcut-ref="userBusinessCut" method="doAround" /> -->
+			<aop:after-throwing pointcut-ref="userBusinessCut"
+			 method="doThrowing" throwing="throwable"/>	
+			<aop:after-returning pointcut-ref="userBusinessCut" 
+			method="doReturning" returning="returning"/>													
+			<aop:after pointcut-ref="userBusinessCut" method="doAfter"/>
+		</aop:aspect>
+	</aop:config>
+
+</beans>

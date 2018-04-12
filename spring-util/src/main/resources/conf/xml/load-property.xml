@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"	
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/util	http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- 注意:  方式1和方式2 只能使用一种，不能同时使用 -->
+
+	<!-- 加载属性配置方式1: 加载属性配置 bean方式 -->
+<!-- 	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:conf/properties/spring-bean.properties</value>
+			</list>
+		</property>
+	</bean> -->
+
+	<!-- 加载属性配置方式2 : context方式  -->
+	<context:property-placeholder 
+		location="classpath*:conf/properties/spring-context.properties"/>
+
+	<!-- 加载属性配置方式3 : util方式  -->
+	<util:properties id="utilLoadProperties" 
+		local-override="true" location="classpath:conf/properties/spring-util.properties">
+	</util:properties>
+
+	<!-- 属性加载 -->
+	<bean id="loadProperty" class="com.hua.bean.LoadProperty">
+		<!-- #{id值['属性全名']} -->
+		<property name="utilValue" value="#{utilLoadProperties['spring.util']}" />
+	</bean>
+
+</beans>

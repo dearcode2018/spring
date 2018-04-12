@@ -1,0 +1,58 @@
+【项目信息】
+项目名称 : spring-datasource
+中文名称 : 
+项目版本 : version 1.0
+
+主要技术 : 
+
+项目描述 : 
+
+项目备注 : 
+
+【项目规划】
+
+1) spring 多数据源使用 aop拦截的方式，执行顺序
+DynamicDataSource --> DataSourceAspect.setXx --> service层方法
+因此数据源切换无法生效，需要解决的是把 DataSourceAspect 切面执行提前
+解决方法: 可以在aop:aspect 中指定 order 值来确定2者的执行顺序
+	一个数据源对应一个事务，service控制事务，一个非业务service层对应一个数据源，调用同一个数据源的多个dao，
+由业务service层最终调用多个非业务service来实现操作多个数据源的目的，但是对于多个数据源的事务控制无法同时实现控制，
+只能实现单个非业务service层的事务控制；
+执行流程: 数据源AOP执行，初始化数据源公共值-ThreadLocal -》 事务AOP执行（获取数据源路由，然后初始化事务配置）
+  -》 开启事务，执行service层方法.
+
+
+2)
+
+3)
+
+4)
+
+5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

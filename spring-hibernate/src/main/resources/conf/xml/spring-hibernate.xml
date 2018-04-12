@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+	
+	<!-- sessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource"  ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.connection.pool.size">${hibernate.connection.pool.size}</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="jdbc.fetch_size">${jdbc.fetch_size}</prop>
+				<prop key="jdbc.batch_size">${jdbc.batch_size}</prop>
+				<prop key="Connection.useUnicode">${Connection.useUnicode}</prop>
+				<prop key="connection.characterEncoding">${connection.characterEncoding}</prop>
+			</props>
+		</property>
+		<!-- 映射文件  -->
+		<property name="mappingResources">
+			<!-- 多个要写成 array方式，只有一个可以直接写 value -->
+			<array>
+				<value>mapping/spring/_01/Custom.hbm.xml</value>
+				<value>mapping/spring/_01/Item.hbm.xml</value>
+			</array>
+		</property>
+	</bean>
+
+</beans>

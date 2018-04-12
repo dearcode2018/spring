@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"	
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd	
+	" default-lazy-init="true">
+	
+
+	<!-- 事务管理器: 基于数据源事务管理器 -->
+	<bean id="dataSourceTransactionManager" 
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 使用动态数据源 -->
+		<property name="dataSource" ref="dynamicDataSource" />
+	</bean>
+
+	<!-- 事务通知 REQUIRED, SUPPORTS, MANDATORY, REQUIRES_NEW, NOT_SUPPORTED, NEVER, NESTED
+		在一个service方法中调用其他service的方法 需要配置事务传播类型为 REQUIRES_NEW，才能开启新的事务
+	 -->
+	<tx:advice id="txAdvice" transaction-manager="dataSourceTransactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRES_NEW" />
+			<tx:method name="insert*" propagation="REQUIRES_NEW" />
+			<tx:method name="save*" propagation="REQUIRES_NEW" />
+			<tx:method name="update*" propagation="REQUIRES_NEW" />
+			<tx:method name="modify*" propagation="REQUIRES_NEW" />
+			<tx:method name="delete*" propagation="REQUIRES_NEW" />
+			<tx:method name="remove*" propagation="REQUIRES_NEW" />
+			<tx:method name="tx*" propagation="REQUIRES_NEW" />
+			<tx:method name="execute*" propagation="REQUIRES_NEW" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 
+		一个数据源对应一个事务，service控制事务，一个非业务service层对应一个数据源，调用同一个数据源的多个dao，
+	由业务service层最终调用多个非业务service来实现操作多个数据源的目的，但是对于多个数据源的事务控制无法同时实现控制，
+	只能实现单个非业务service层的事务控制；
+	执行流程: 数据源AOP执行，初始化数据源公共值-ThreadLocal -》 事务AOP执行（获取数据源路由，然后初始化事务配置）
+	  -》 开启事务，执行service层方法.
+	 -->
+	<!-- 数据源AOP配置 -->
+	<bean id="dataSourceAspect" class="com.hua.aspect.DataSourceAspect">
+		<!-- 区分拦截子类 的包路径前缀 -->
+		<property name="subPackages">
+			<list>
+				<value>com.hua.service.one</value>
+				<value>com.hua.service.two</value>
+				<value>com.hua.service.three</value>								
+			</list>
+		</property>
+	</bean>	
+	<aop:config proxy-target-class="true">
+		<!-- DataSourceAspect 使用注解标识 -->
+		<aop:aspect ref="dataSourceAspect" order="1">
+			<aop:pointcut id="pointcutServiceOne" expression="execution (* com.hua.service.one.*.*(..))" />
+			<aop:pointcut id="pointcutServiceTwo" expression="execution (* com.hua.service.two.*.*(..))" />
+			<aop:pointcut id="pointcutServiceThree" expression="execution (* com.hua.service.three.*.*(..))" />	
+			<!-- 切点引用，在执行之前先设置好数据源 -->
+			<aop:before pointcut-ref="pointcutServiceOne" method="setDataSource01" />	
+			<aop:before pointcut-ref="pointcutServiceTwo" method="setDataSource02" />	
+			<aop:before pointcut-ref="pointcutServiceThree" method="setDataSource03" />							
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- 事务AOP配置 -->
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="transactionPointCut" expression="execution(* com.hua.service..*.*(..))" />
+		<!-- 引用上面的切点 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="transactionPointCut" order="2" />
+	</aop:config>
+	
+
+</beans>

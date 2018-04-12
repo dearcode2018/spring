@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- coreDaoTwo 注意抽象类不能声明为一个bean -->
+	<bean id="coreDao" class="com.hua.dao.impl.CoreDaoImpl" abstract="true" >
+		<property name="dataSource" ref="dynamicDataSource" />
+	</bean>
+
+	<!-- PersonOneDao -->
+	<bean id="personOneDao" class="com.hua.dao.one.PersonOneDaoImpl" parent="coreDao">
+	</bean>
+
+	<!-- PersonTwoDao -->
+	<bean id="personTwoDao" class="com.hua.dao.two.PersonTwoDaoImpl" parent="coreDao">
+	</bean>
+
+	<!-- PersonThreeDao -->
+	<bean id="personThreeDao" class="com.hua.dao.three.PersonThreeDaoImpl" parent="coreDao">
+	</bean>
+
+</beans>

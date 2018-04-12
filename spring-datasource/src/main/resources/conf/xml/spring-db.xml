@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/jdbc	http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+	" default-lazy-init="true">
+
+	
+	<!-- db_01 -->
+	<bean id="dataSource_01" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${db_01.jdbc.c3p0.driverClass}" />
+		<property name="jdbcUrl" value="${db_01.jdbc.c3p0.jdbcUrl}" />
+		<property name="user" value="${db_01.jdbc.c3p0.user}" />
+		<property name="password" value="${db_01.jdbc.c3p0.password}" />
+		<property name="maxPoolSize" value="${db_01.jdbc.c3p0.maxPoolSize}" />
+		<property name="minPoolSize" value="${db_01.jdbc.c3p0.minPoolSize}" />
+		<property name="initialPoolSize" value="${db_01.jdbc.c3p0.initialPoolSize}" />
+		<property name="acquireIncrement" value="${db_01.jdbc.c3p0.acquireIncrement}" />
+		<property name="checkoutTimeout" value="${db_01.jdbc.c3p0.checkoutTimeout}" />
+		<property name="maxIdleTime" value="${db_01.jdbc.c3p0.maxIdleTime}" />
+		<property name="idleConnectionTestPeriod" value="${db_01.jdbc.c3p0.idleConnectionTestPeriod}" />
+		<property name="acquireRetryAttempts" value="${db_01.jdbc.c3p0.acquireRetryAttempts}" />
+		<property name="breakAfterAcquireFailure" value="${db_01.jdbc.c3p0.breakAfterAcquireFailure}" />
+		<property name="testConnectionOnCheckout" value="${db_01.jdbc.c3p0.testConnectionOnCheckout}" />
+	</bean>	
+
+	<!-- db_02 -->
+	<bean id="dataSource_02" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${db_02.jdbc.c3p0.driverClass}" />
+		<property name="jdbcUrl" value="${db_02.jdbc.c3p0.jdbcUrl}" />
+		<property name="user" value="${db_02.jdbc.c3p0.user}" />
+		<property name="password" value="${db_02.jdbc.c3p0.password}" />
+		<property name="maxPoolSize" value="${db_02.jdbc.c3p0.maxPoolSize}" />
+		<property name="minPoolSize" value="${db_02.jdbc.c3p0.minPoolSize}" />
+		<property name="initialPoolSize" value="${db_02.jdbc.c3p0.initialPoolSize}" />
+		<property name="acquireIncrement" value="${db_02.jdbc.c3p0.acquireIncrement}" />
+		<property name="checkoutTimeout" value="${db_02.jdbc.c3p0.checkoutTimeout}" />
+		<property name="maxIdleTime" value="${db_02.jdbc.c3p0.maxIdleTime}" />
+		<property name="idleConnectionTestPeriod" value="${db_02.jdbc.c3p0.idleConnectionTestPeriod}" />
+		<property name="acquireRetryAttempts" value="${db_02.jdbc.c3p0.acquireRetryAttempts}" />
+		<property name="breakAfterAcquireFailure" value="${db_02.jdbc.c3p0.breakAfterAcquireFailure}" />
+		<property name="testConnectionOnCheckout" value="${db_02.jdbc.c3p0.testConnectionOnCheckout}" />
+	</bean>	
+	
+	<!-- db_03 -->
+	<bean id="dataSource_03" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${db_03.jdbc.c3p0.driverClass}" />
+		<property name="jdbcUrl" value="${db_03.jdbc.c3p0.jdbcUrl}" />
+		<property name="user" value="${db_03.jdbc.c3p0.user}" />
+		<property name="password" value="${db_03.jdbc.c3p0.password}" />
+		<property name="maxPoolSize" value="${db_03.jdbc.c3p0.maxPoolSize}" />
+		<property name="minPoolSize" value="${db_03.jdbc.c3p0.minPoolSize}" />
+		<property name="initialPoolSize" value="${db_03.jdbc.c3p0.initialPoolSize}" />
+		<property name="acquireIncrement" value="${db_03.jdbc.c3p0.acquireIncrement}" />
+		<property name="checkoutTimeout" value="${db_03.jdbc.c3p0.checkoutTimeout}" />
+		<property name="maxIdleTime" value="${db_03.jdbc.c3p0.maxIdleTime}" />
+		<property name="idleConnectionTestPeriod" value="${db_03.jdbc.c3p0.idleConnectionTestPeriod}" />
+		<property name="acquireRetryAttempts" value="${db_03.jdbc.c3p0.acquireRetryAttempts}" />
+		<property name="breakAfterAcquireFailure" value="${db_03.jdbc.c3p0.breakAfterAcquireFailure}" />
+		<property name="testConnectionOnCheckout" value="${db_03.jdbc.c3p0.testConnectionOnCheckout}" />
+	</bean>		
+	
+	<!-- 动态数据源 -->
+	<bean id = "dynamicDataSource" class="com.hua.datasource.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry key="dataSource_01" value-ref="dataSource_01" />
+				<entry key="dataSource_02" value-ref="dataSource_02" />
+				<entry key="dataSource_03" value-ref="dataSource_03" />								
+			</map>
+		</property>
+		<!-- 默认数据源 -->
+		<property name="defaultTargetDataSource" ref="dataSource_01" />
+	</bean>
+	
+</beans>

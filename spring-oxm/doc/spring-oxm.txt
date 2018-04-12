@@ -1,0 +1,32 @@
+
+
+http://my.oschina.net/u/1455908/blog/311723
+
+1) 编组、解组
+编组(marshalling): 将Java Bean转换成XML文档的过程，Java Bean的所有字段和字段值
+都将作为XML元素或属性填充到XML文档中，编组也称为序列化.
+
+解组(unmarshalling): 将XML文档中所有元素或属性作为Java Bean字段填充到Java Bean
+中，解组也称为反序列化.
+
+使用 Spring OXM可以利用Spring 框架的特性简化配置，Spring的Bean库支持
+将实例化的O/X 编组器注入来使用编组器对象，这将加快开发和部署.
+
+Spring OXM 框架只定义了2个接口: Mar	shaller 和 Unmarshaller.
+
+Spring OXM提供了一个统一的异常层次结构，这意味着不管使用哪个XML第三方实现，
+抛出的运行时异常都是相同的，这便于在多个O/X 供应商之间切换.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

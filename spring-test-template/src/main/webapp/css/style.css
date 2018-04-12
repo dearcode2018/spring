@@ -1,0 +1,134 @@
+
+header{
+  position: relative;
+  background-color: #0068c6;
+}
+header h2{
+  margin: 0;
+  text-align: center;
+  padding: .28rem 0;
+  font-size: .36rem;
+  font-weight: 100;
+  color:#fff;
+}
+.inblock{
+  display: inline-block;
+}
+.btn-back{
+  position: absolute;
+  padding: .2rem .3rem;
+  font-size: .48rem;
+  color:#fff;
+}
+.msg-wrap{
+  width: 95%;
+  margin: 0 auto;
+  border-bottom:  solid 1px #e7e7e7;
+  font-size: .28rem;
+}
+.msg-wrap a{
+  position: relative;
+  display: block;
+  padding: .2rem .3rem;
+  text-decoration: none;
+  color:#898989;
+}
+.msg-wrap a:after{
+  content: ">";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  font-size: .31rem;
+}
+.msg-wrap h3{
+  margin: .1rem 0;
+  font-weight: normal;
+  font-size: .325rem;
+  color:#969696;
+}
+.msg-wrap.active h3{
+  color:#353535;
+}
+.msg-wrap.active a:before{
+  content: '';
+  position: absolute;
+  top: .48rem;
+  left:.12rem;
+  z-index: 10;
+  width: .1rem;
+  height: .1rem;
+  border-radius: 50%;
+  background-color: #f83e4b;
+}
+.msg-wrap h3,.msg{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.detail{
+  width: 92%;
+  margin: 0 auto;
+  font-size: .28rem;
+}
+.content{
+  font-size: .28rem;
+  color:#000;
+}
+.detail h3{
+  font-size: .32rem;
+  margin-bottom: .1rem;
+}
+.detail .infor{
+  font-size: .25rem;
+  color:#666;
+  padding-bottom: .2rem;
+}
+
+.content img{
+  max-width:100%;
+}
+
+.content{
+  font-size: .28rem;
+  color:#000;
+  padding-bottom: .5rem;
+  text-align: justify;
+}
+.content img{
+  max-width:100% !important;
+}
+.content table {
+  width: 98%;
+  margin: .2rem auto;
+}
+.content table td {
+  border: solid 1px #999;
+  padding: .05rem;
+}
+.content table tr:nth-child(2n+1) {
+  background-color: rgba(240, 240, 240, .3);
+}
+.content table tr:nth-child(2n) {
+  background-color: #fff;
+}
+.content ul{
+  padding-left: .5rem
+}
+.content ul li,
+.content ol li {
+  margin: 5px 0;
+}
+.content ul p,
+.content ol p {
+  margin: 5px 0;
+}
+.content p {
+  line-height: 1.5;
+}
+.content a{
+  color:#09c;
+  text-decoration: none;
+}
+.content a:hover{
+  text-decoration: underline;
+}

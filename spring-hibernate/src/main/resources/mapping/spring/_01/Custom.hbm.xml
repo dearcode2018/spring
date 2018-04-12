@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	<class name="com.hua.orm.entity.m2o.Custom" table="custom">
+		<id name="id" type="java.lang.String">
+			<column name="id">
+				<comment>唯一标识符</comment>
+			</column>
+			<!-- 本地(数据库自身)生成方式 -->
+			<generator class="native" />		
+		</id>	
+		<property name="name" type="java.lang.String">
+			<column name="name" length="128" not-null="false">
+				<!-- 列注释 -->
+				<comment>客户姓名</comment>
+			</column>
+		</property>	
+		<property name="balance" type="java.lang.Double">
+			<column name="balance" not-null="false">
+				<!-- 列注释 -->
+				<comment>帐户余额</comment>
+			</column>
+		</property>
+		<property name="address" type="java.lang.String">
+			<column name="address" length="255" not-null="false">
+				<!-- 列注释 -->
+				<comment>住址</comment>
+			</column>
+		</property>
+		<!-- 枚举值配置 -->
+		<property name="status">
+			<column name="status" not-null="false">
+				<!-- 列注释 -->
+				<comment>客户状态 (0-无效, 1-未激活, 2-正常)</comment>
+			</column>
+			<type name="org.hibernate.type.EnumType">
+			 	<param name="enumClass">com.hua.constant.ext.CustomStatus</param>
+				<!--  12为java.sql.Types.VARCHAR常量值，即保存枚举的字面值到数据库。如果不指定type参数，保存枚举的索引值(从0开始)到数据库 -->
+		<!-- 		<param name="type">12</param>	 -->
+			</type>			
+		</property>
+		<!-- 一对多 -->
+		<!-- 一旦设置 inverse="false" 持久化one时，最后会出现
+		update item set customId=? where id=? 多余的语句，将降低性能。
+		因此 在one方，inverse必须设置为true
+		 -->
+		<set name="items" inverse="true" fetch="join" table="item" cascade="delete, save-update">
+			<key>
+				<column name="customId"></column>
+			</key>
+			<one-to-many class="com.hua.orm.entity.m2o.Item" />
+		</set>					
+	</class>
+
+</hibernate-mapping>

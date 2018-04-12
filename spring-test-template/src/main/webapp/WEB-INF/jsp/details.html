@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>系统详情</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="text/javascript">        !function(a){function b(){var b=g.getBoundingClientRect().width;a.rem=(b/6.4>100?100:(b/6.4<50?50:b/6.4)),g.style.fontSize=a.rem+ "px"}var g=a.document.documentElement,e;a.addEventListener( "resize",function(){clearTimeout(e),e=setTimeout(b,300)},!1),a.addEventListener( "pageshow",function(a){a.persisted&&(clearTimeout(e),e=setTimeout(b,300))},!1),b()}(window);
+  </script>
+</head>
+<body>
+	<header>
+    <div class="btn-back" id="btnBack">&lt;</div>
+    <h2>系统公告</h2>
+  </header>
+  <article class="detail">
+    <h3>${ititle}</h3>
+    <div class="infor">
+      <div class="inblock">${date}</div>
+      <div class="inblock">${author}</div>
+    </div>
+    <div class="content">
+    	
+    </div>
+  </article>
+<script type="text/javascript">
+window.onload = function(){
+  var btnBack = document.getElementById("btnBack");
+  btnBack.addEventListener("touchstart",function(){
+    history.go(-1);
+  })
+}
+</script>
+</body>
+</html>
