@@ -7,6 +7,7 @@
 package com.hua.controller.sys;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,12 +36,39 @@ public final class UserController extends BaseController
 	@Resource
 	private UserService userService;
 	
+	@RequestMapping("login2")
+	@ResponseBody
+	public final ResultBean login2(final HttpServletRequest request, 
+			final HttpServletResponse response, final User user)
+	{
+		System.out.println("ddd");
+		log.info("login2 =====> enter ...");
+		Cookie[] cookies = request.getCookies();
+		if (null != cookies)
+		{
+			for (Cookie e : cookies)
+			{
+				log.info("domain: "  + e.getDomain() + ", key = " + e.getName() + ", value = " + e.getValue());
+			}
+		}
+		
+		return userService.login(user);
+	}
+	
 	@RequestMapping("login")
 	@ResponseBody
 	public final ResultBean login(final HttpServletRequest request, 
 			final HttpServletResponse response, final User user)
 	{
-		log.info("login =====> enter ...");
+		log.info("login2 =====> enter ...");
+		Cookie[] cookies = request.getCookies();
+		if (null != cookies)
+		{
+			for (Cookie e : cookies)
+			{
+				log.info("key = " + e.getName() + ", value = " + e.getValue());
+			}
+		}
 		
 		return userService.login(user);
 	}

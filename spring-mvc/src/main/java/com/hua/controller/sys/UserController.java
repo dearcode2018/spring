@@ -7,6 +7,7 @@
 package com.hua.controller.sys;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,6 +22,7 @@ import com.hua.controller.BaseController;
 import com.hua.entity.User;
 import com.hua.entity.UserLog;
 import com.hua.service.sys.UserService;
+import com.hua.util.CookieUtil;
 
  /**
  * @type UserController
@@ -41,6 +43,17 @@ public final class UserController extends BaseController
 			final HttpServletResponse response, final User user)
 	{
 		log.info("login =====> enter ...");
+		Cookie[] cookies = request.getCookies();
+		if (null != cookies)
+		{
+			for (Cookie e : cookies)
+			{
+				log.info("key = " + e.getName() + ", value = " + e.getValue());
+			}
+		}
+		//CookieUtil.add(response, ".hua.com", "AUTH-HEADER", "KWEO2309DKMCOODKWE23O");
+		//CookieUtil.add(response, ".hua.com", "AUTH-HEADER", "WELO349JKSDJLLWE0K");
+		
 		
 		return userService.login(user);
 	}

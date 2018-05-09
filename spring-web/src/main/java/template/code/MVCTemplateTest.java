@@ -39,7 +39,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.hua.controller.sys.UserController;
 import com.hua.entity.User;
 import com.hua.test.BaseTest;
 
@@ -90,8 +89,8 @@ public final class MVCTemplateTest extends BaseTest {
 	 * 而启动spring 及其mvc环境，然后通过注入方式，可以走完 spring mvc 完整的流程.
 	 * 
 	 */
-	@Resource
-	private UserController userController;
+	//@Resource
+	//private UserController userController;
 	
 	//@PathVariable
 	
@@ -135,7 +134,7 @@ public final class MVCTemplateTest extends BaseTest {
 			user.setUsername("admin");
 			user.setPassword("123456");
 			
-			userController.login(request, response, user);
+			//userController.login(request, response, user);
 			
 		} catch (Exception e) {
 			log.error("testInjectController =====> ", e);
