@@ -16,7 +16,6 @@
 		<module>spring-anno</module>		
 		<module>spring-aop</module>		
 		<module>spring-bean</module>		
-		<module>spring-boot</module>		
 		<module>spring-cache</module>		
 		<module>spring-config</module>	
 		<module>spring-dao</module>		

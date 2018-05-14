@@ -51,8 +51,10 @@ public final class UserController extends BaseController
 				log.info("key = " + e.getName() + ", value = " + e.getValue());
 			}
 		}
-		//CookieUtil.add(response, ".hua.com", "AUTH-HEADER", "KWEO2309DKMCOODKWE23O");
-		//CookieUtil.add(response, ".hua.com", "AUTH-HEADER", "WELO349JKSDJLLWE0K");
+		CookieUtil.add(response, "www.hua.com", "AUTH-HEADER", "KWEO2309DKMCOODKWE23O0");
+		CookieUtil.add(response, ".com", "AUTH-HEADER", "KWEO2309DKMCOODKWE23O1");
+		CookieUtil.add(response, ".hua.com", "AUTH-HEADER", "KWEO2309DKMCOODKWE23O2");
+		CookieUtil.add(response, "www.rj-info.com", "AUTH-HEADER", "WELO349JKSDJLLWE0K");
 		
 		
 		return userService.login(user);
