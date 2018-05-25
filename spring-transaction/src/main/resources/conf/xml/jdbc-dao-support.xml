@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- coreDaoTwo 注意抽象类不能声明为一个bean -->
+	<bean id="coreDao" class="com.hua.dao.impl.CoreDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- PersonDao -->
+	<bean id="personDao" class="com.hua.dao.o2o.impl.PersonDaoImpl" parent="coreDao">
+	</bean>
+	
+	<!-- customDao -->
+	<bean id="customDao" class="com.hua.dao.m2o.impl.CustomDaoImpl" parent="coreDao">
+	</bean>
+
+	<!-- 
+	parent 指定父类-在IOC容器中建立父子关系，否则父类之前注入的jdbcTemplate将无法获取
+	<bean id="personDao" class="com.hua.dao.o2o.impl.PersonDaoImpl" parent="coreDao">
+	</bean>	
+	 -->
+
+
+
+
+</beans>

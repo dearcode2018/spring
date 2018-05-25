@@ -36,7 +36,10 @@
 		<module>spring-oxm</module>		
 		<module>spring-schedule</module>		
 		<module>spring-security</module>		
-		<module>spring-sign</module>		
+		<module>spring-shiro</module>
+		<module>spring-sign</module>	
+		<module>spring-transaction</module>	
+		<module>spring-transaction-anno</module>
 		<module>spring-test</module>		
 		<module>spring-tx</module>	
 		<module>spring-util</module>		

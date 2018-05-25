@@ -7,14 +7,15 @@
 		<artifactId>spring-entire</artifactId>
 		<version>0.0.1</version>
 	</parent>	
-	<artifactId>spring-template</artifactId>
-	<name>spring-template</name>
+	<artifactId>spring-transaction-anno</artifactId>
+	<name>spring-transaction-anno</name>
 	<packaging>jar</packaging>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<spring.version>0.0.1</spring.version>																					
+		<spring.version>0.0.1</spring.version>	
+		<orm.version>0.0.1</orm.version>																				
 	</properties>
 
 	<dependencies>
@@ -23,6 +24,12 @@
 			<artifactId>spring</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.hua</groupId>
+			<artifactId>orm</artifactId>
+			<version>${orm.version}</version>
+		</dependency>		
 		
 	</dependencies>
 
