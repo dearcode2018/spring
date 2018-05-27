@@ -14,15 +14,17 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<spring.version>0.0.1</spring.version>	
-		<orm.version>0.0.1</orm.version>																				
+		<com.hua.spring.version>0.0.1</com.hua.spring.version>	
+		<orm.version>0.0.1</orm.version>		
+		<!-- 修改此处变量，对父级变量并没有影响 -->
+<!-- 		<spring.version>5.0.6.RELEASE</spring.version>		 -->																		
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.hua</groupId>
 			<artifactId>spring</artifactId>
-			<version>${spring.version}</version>
+			<version>${com.hua.spring.version}</version>
 		</dependency>
 
 		<dependency>

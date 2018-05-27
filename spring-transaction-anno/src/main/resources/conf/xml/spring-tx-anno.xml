@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- 事务管理器 -->
+	<bean id="transactionManager" 
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 启用事务注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	
+	<!-- 超过多个事务管理器的时候，
+	需要在@Transactional注解中声明使用哪个一个 -->
+	
+	<!-- 事务管理器 -->
+<!-- 	<bean id="transactionManager1" 
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean> -->
+	
+	<!-- 启用事务注解 -->
+<!-- 	<tx:annotation-driven transaction-manager="transactionManager1"/> -->
+	
+
+	<!-- 事务管理器 -->
+	<!-- <bean id="transactionManager2" 
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean> -->
+	
+	<!-- 启用事务注解 -->
+<!-- 	<tx:annotation-driven transaction-manager="transactionManager2"/> -->
+
+
+
+</beans>

@@ -19,7 +19,7 @@
 		<javax.transaction.jta.version>1.1</javax.transaction.jta.version>		
 		
 		<!-- spring -->
-		<spring.version>4.1.6.RELEASE</spring.version>
+		<spring.version>5.0.6.RELEASE</spring.version>
 		<spring.dao.version>2.0.8</spring.dao.version>
 		<spring.asm.version>3.1.4.RELEASE</spring.asm.version>
 		<spring.security.version>3.2.5.RELEASE</spring.security.version>
@@ -81,11 +81,11 @@
 			<version>${spring.version}</version>
 		</dependency>
 
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc-portlet</artifactId>
 			<version>${spring.version}</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>org.springframework</groupId>
