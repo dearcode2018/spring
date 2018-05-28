@@ -28,7 +28,11 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.hua.constant.ext.CustomStatus;
+import com.hua.dao.m2o.CustomDao;
+import com.hua.orm.entity.m2o.Custom;
 import com.hua.service.TransactionPropagationService;
 import com.hua.test.BaseTest;
 
@@ -67,8 +71,8 @@ public class TransactionPropagationTest extends BaseTest {
 	@Resource
 	private TransactionPropagationService transactionPropagationService;
 	
-	
-	
+	@Resource
+	private CustomDao customDao;
 	
 	/**
 	 * 事务注解
@@ -142,15 +146,26 @@ public class TransactionPropagationTest extends BaseTest {
 			/*
 			 * Propagation.REQUIRED
 			 * @Transactional 注解的默认传播方式
-			 * 1) 若当前存在事务，则挂起当前事务并新建一个事务，
-			 * 新事务执行结束后，唤醒之前挂起的事务，继续执行.
-			 * 
-			 * 2) 若当前不存在事务，则新建一个事务.
+			 * 若当前存在事务，则使用该事务执行，否则创建一个事务.
 			 * 
 			 */
+			Custom entity = null;
 			
+			entity = new Custom();
+			entity.setName("Propagation.REQUIRED");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
 			
+			/*
+			 * 测试的时候，无事务和有事务交替注释进行，以便观察结果
+			 */
 			
+			// 无事务
+			transactionPropagationService.callRequiredMethodWithoutTransaction(entity);
+
+			// 有事务
+			//transactionPropagationService.callRequiredMethodWithTransaction(entity);			
 			
 		} catch (Exception e) {
 			log.error("testRequired =====> ", e);
@@ -164,9 +179,66 @@ public class TransactionPropagationTest extends BaseTest {
 	 * 
 	 */
 	@Test
+	public void testRequiresNew() {
+		try {
+			/*
+			 * Propagation.REQUIRES_NEW
+			 * 1) 若当前存在事务，则挂起当前事务并创建一个事务，
+			 * 新事务执行结束后，唤醒之前挂起的事务，继续执行.
+			 * 
+			 * 2) 若当前不存在事务，则创建一个事务.
+			 * 
+			 * 
+			 */
+			Custom entity = null;
+			
+			entity = new Custom();
+			entity.setName("Propagation.REQUIRES_NEW");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			/*
+			 * 测试的时候，无事务和有事务交替注释进行，以便观察结果
+			 */
+			
+			// 无事务
+			transactionPropagationService.callRequiresNewMethodWithoutTransaction(entity);
+
+			// 有事务
+			//transactionPropagationService.callRequiresNewMethodWithTransaction(entity);	
+			
+		} catch (Exception e) {
+			log.error("testRequiresNew =====> ", e);
+		}
+	}
+	
+	/**
+	 * 
+	 * 描述: 
+	 * @author qye.zheng
+	 * 
+	 */
+	@Test
 	public void testSupports() {
 		try {
+			Custom entity = null;
 			
+			entity = new Custom();
+			entity.setName("Propagation.SUPPORTS");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			/*
+			 * 测试的时候，无事务和有事务交替注释进行，以便观察结果
+			 */
+			
+			// 无事务
+			transactionPropagationService.callSupportsMethodWithoutTransaction(entity);
+
+			// 有事务
+			//transactionPropagationService.callSupportsMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testSupports =====> ", e);
@@ -182,7 +254,23 @@ public class TransactionPropagationTest extends BaseTest {
 	@Test
 	public void testMandatory() {
 		try {
+			Custom entity = null;
 			
+			entity = new Custom();
+			entity.setName("Propagation.MANDATORY");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			/*
+			 * 测试的时候，无事务和有事务交替注释进行，以便观察结果
+			 */
+			
+			// 无事务
+			transactionPropagationService.callMandatoryMethodWithoutTransaction(entity);
+
+			// 有事务
+			//transactionPropagationService.callMandatoryMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testMandatory =====> ", e);
@@ -196,25 +284,25 @@ public class TransactionPropagationTest extends BaseTest {
 	 * 
 	 */
 	@Test
-	public void testRequiresNew() {
-		try {
-			
-			
-		} catch (Exception e) {
-			log.error("testRequiresNew =====> ", e);
-		}
-	}
-	
-	/**
-	 * 
-	 * 描述: 
-	 * @author qye.zheng
-	 * 
-	 */
-	@Test
 	public void testNotSupported() {
 		try {
+			Custom entity = null;
 			
+			entity = new Custom();
+			entity.setName("Propagation.NOT_SUPPORTED");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			/*
+			 * 测试的时候，无事务和有事务交替注释进行，以便观察结果
+			 */
+			
+			// 无事务
+			transactionPropagationService.callNotSupportedMethodWithoutTransaction(entity);
+
+			// 有事务
+			//transactionPropagationService.callNotSupportedMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testNotSupported =====> ", e);
@@ -230,7 +318,23 @@ public class TransactionPropagationTest extends BaseTest {
 	@Test
 	public void testNever() {
 		try {
+			Custom entity = null;
 			
+			entity = new Custom();
+			entity.setName("Propagation.NEVER");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			/*
+			 * 测试的时候，无事务和有事务交替注释进行，以便观察结果
+			 */
+			
+			// 无事务
+			transactionPropagationService.callNeverMethodWithoutTransaction(entity);
+
+			// 有事务
+			//transactionPropagationService.callNeverMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testNever =====> ", e);
@@ -246,15 +350,84 @@ public class TransactionPropagationTest extends BaseTest {
 	@Test
 	public void testNested() {
 		try {
+			Custom entity = null;
 			
+			entity = new Custom();
+			entity.setName("Propagation.NESTED");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			/*
+			 * 测试的时候，无事务和有事务交替注释进行，以便观察结果
+			 */
+			
+			// 无事务
+			transactionPropagationService.callNestedMethodWithoutTransaction(entity);
+
+			// 有事务
+			//transactionPropagationService.callNestedMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testNested =====> ", e);
 		}
 	}
 	
+	/**
+	 * 
+	 * 描述: 
+	 * @author qye.zheng
+	 * 
+	 */
+	@Test
+	public void testDao() {
+		try {
+			Custom entity = null;
+			
+			entity = new Custom();
+			entity.setName("赵备小朋友01");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			Object[] params = new Object[4];
+			params[0] = entity.getName();
+			params[1] = entity.getAddress();
+			params[2] = entity.getBalance();
+			params[3] = entity.getStatus().getValue();
+			String sql = "insert into custom (name, address, balance, status) " +
+					"values (?, ?, ?, ?)";
+			customDao.insert(sql, params);
+			
+		} catch (Exception e) {
+			log.error("testDao =====> ", e);
+		}
+	}
 	
-	
+	/**
+	 * 
+	 * 描述: 
+	 * @author qye.zheng
+	 * 
+	 */
+	@Test
+	public void testDoNoneTransaction() {
+		try {
+			Custom entity = null;
+			
+			entity = new Custom();
+			entity.setName("无事务");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			
+			transactionPropagationService.doNoneTransaction(entity);
+			
+		} catch (Exception e) {
+			log.error("testDoNoneTransaction =====> ", e);
+		}
+	}
 	
 	/**
 	 * 
@@ -265,7 +438,13 @@ public class TransactionPropagationTest extends BaseTest {
 	@Test
 	public void test() {
 		try {
+			Custom entity = null;
 			
+			entity = new Custom();
+			entity.setName("赵备小朋友01");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
 			
 		} catch (Exception e) {
 			log.error("test =====> ", e);
