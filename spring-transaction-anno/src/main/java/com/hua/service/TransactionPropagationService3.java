@@ -152,7 +152,7 @@ public class TransactionPropagationService3
 		customDao.insert(sql, params);
 		
 		// 调用其他对象的方法
-		transactionPropagationService2.insert1(entity);
+		//transactionPropagationService2.insert1(entity);
 	}
 	
 	/**

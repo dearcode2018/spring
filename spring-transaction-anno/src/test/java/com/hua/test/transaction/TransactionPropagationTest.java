@@ -162,10 +162,10 @@ public class TransactionPropagationTest extends BaseTest {
 			 */
 			
 			// 无事务
-			transactionPropagationService.callRequiredMethodWithoutTransaction(entity);
+			//transactionPropagationService.callRequiredMethodWithoutTransaction(entity);
 
 			// 有事务
-			//transactionPropagationService.callRequiredMethodWithTransaction(entity);			
+			transactionPropagationService.callRequiredMethodWithTransaction(entity);			
 			
 		} catch (Exception e) {
 			log.error("testRequired =====> ", e);
@@ -382,6 +382,19 @@ public class TransactionPropagationTest extends BaseTest {
 	@Test
 	public void testDao() {
 		try {
+			/**
+			 delete from custom where id > 10;
+			 commit;
+			 
+			 查看mysql数据库隔离级别
+			 show VARIABLES like '%tx_isolation%';
+			 */
+			/*
+			 * 由于mysql 默认是自动提交的，无法测试没有事务的情况，需要修改mysql的配置，
+			在mysql主目录下，修改my.ini 设置 autocommit=0
+			查看 autocommit 变量值 
+			show VARIABLES like '%autocommit%';
+			 */
 			Custom entity = null;
 			
 			entity = new Custom();
@@ -413,6 +426,16 @@ public class TransactionPropagationTest extends BaseTest {
 	@Test
 	public void testDoNoneTransaction() {
 		try {
+			/*
+			 * 由于mysql 默认是自动提交的，无法测试没有事务的情况，需要修改mysql的配置，
+			在mysql主目录下，修改my.ini 设置 autocommit=0
+			查看 autocommit 变量值 
+			show VARIABLES like '%autocommit%';
+			注意: 使用了dbcp数据源之后，直接在数据源获取数据库连接的时候设置
+			自动提交为false，则可以验证事务的相关特征.
+			为了方便navicat等客户端操作sql，还是需要将autocommit设置为1的状态
+			而在数据源层面设置关闭自动提交即可.
+			 */
 			Custom entity = null;
 			
 			entity = new Custom();

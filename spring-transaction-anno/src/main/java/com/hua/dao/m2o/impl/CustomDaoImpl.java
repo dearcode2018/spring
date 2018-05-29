@@ -17,7 +17,7 @@ import com.hua.orm.entity.m2o.Custom;
  * 
  * CustomDaoImpl
  */
-public final class CustomDaoImpl extends CoreDaoImpl<Custom> implements CustomDao
+public class CustomDaoImpl extends CoreDaoImpl<Custom> implements CustomDao
 {
 
 

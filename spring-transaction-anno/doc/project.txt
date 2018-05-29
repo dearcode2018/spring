@@ -1,6 +1,6 @@
 【项目信息】
-项目名称 : spring
-中文名称 : Spring
+项目名称 : spring-transaction-anno
+中文名称 : Spring 事务注解
 项目版本 : version 1.0
 
 主要技术 : 
@@ -11,7 +11,13 @@
 
 【项目规划】
 
-1)
+1) mysql
+由于mysql 默认是自动提交的，无法测试没有事务的情况，需要修改mysql的配置，
+在mysql主目录下，修改my.ini 设置 autocommit=0
+
+/* 查看 autocommit 变量值 */
+show VARIABLES like '%autocommit%';
+
 
 2)
 

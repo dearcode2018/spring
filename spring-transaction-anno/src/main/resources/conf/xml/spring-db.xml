@@ -10,18 +10,23 @@
 	
 	<!-- 数据连接池 dbcp2 -->
 	<!-- dataSource: c3p0 -->
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-		<property name="driverClass" value="${driverClass}" />
-		<property name="jdbcUrl" value="${jdbcUrl}" />
-		<property name="user" value="${user}" />
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${driverClass}" />
+		<property name="url" value="${jdbcUrl}" />
+		<property name="username" value="${user}" />
 		<property name="password" value="${password}" />
-		<property name="initialPoolSize" value="${initialPoolSize}" />
-		<property name="minPoolSize" value="${minPoolSize}" />
-		<property name="maxPoolSize" value="${maxPoolSize}" />
-		<property name="acquireIncrement" value="${acquireIncrement}" />
-		<property name="maxStatements" value="${maxStatements}" />
-		<property name="maxIdleTime" value="${maxIdleTime}" />
-		<property name="checkoutTimeout" value="${checkoutTimeout}" />
+		<property name="initialSize" value="${initialPoolSize}" />
+		<property name="minIdle" value="${minPoolSize}" />
+		<property name="maxIdle" value="${maxPoolSize}" />
+		<!-- 连接关闭后自动提交
+			注意 c3p0的这个自动提交属性定设置为false并没有生效，在没有事务的情况下，
+			依然提交了事务，因此选择BasicDataSource才是正确的选择
+			注意: 使用了dbcp数据源之后，直接在数据源获取数据库连接的时候设置
+			自动提交为false，则可以验证事务的相关特征.
+			为了方便navicat等客户端操作sql，还是需要将autocommit设置为1的状态
+			而在数据源层面设置关闭自动提交即可.			
+		-->
+		<property name="defaultAutoCommit" value="false" />
 	</bean>	
 	
 </beans>
