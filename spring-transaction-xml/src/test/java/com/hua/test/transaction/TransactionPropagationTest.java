@@ -27,13 +27,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.hua.constant.ext.CustomStatus;
 import com.hua.dao.m2o.CustomDao;
 import com.hua.orm.entity.m2o.Custom;
-import com.hua.service.TransactionPropagationService;
+import com.hua.service.PropagationService;
 import com.hua.test.BaseTest;
 
 //import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -58,7 +56,8 @@ import com.hua.test.BaseTest;
 		"classpath:conf/xml/spring-bean.xml",	
 		"classpath:conf/xml/spring-db.xml",
 		"classpath:conf/xml/jdbc-dao-support.xml",
-		"classpath:conf/xml/spring-tx-anno.xml"		
+		//"classpath:conf/xml/spring-tx.xml"		
+		"classpath:conf/xml/spring-tx2.xml"		
 })
 /*
  * @TransactionConfiguration 在高版本中已经移除了
@@ -69,7 +68,7 @@ import com.hua.test.BaseTest;
 public class TransactionPropagationTest extends BaseTest {
 
 	@Resource
-	private TransactionPropagationService transactionPropagationService;
+	private PropagationService propagationService;
 	
 	@Resource
 	private CustomDao customDao;
@@ -162,10 +161,10 @@ public class TransactionPropagationTest extends BaseTest {
 			 */
 			
 			// 无事务
-			//transactionPropagationService.callRequiredMethodWithoutTransaction(entity);
+			//propagationService.callRequiredMethodWithoutTransaction(entity);
 
 			// 有事务
-			transactionPropagationService.callRequiredMethodWithTransaction(entity);			
+			propagationService.callRequiredMethodWithTransaction(entity);			
 			
 		} catch (Exception e) {
 			log.error("testRequired =====> ", e);
@@ -203,10 +202,10 @@ public class TransactionPropagationTest extends BaseTest {
 			 */
 			
 			// 无事务
-			transactionPropagationService.callRequiresNewMethodWithoutTransaction(entity);
+			//propagationService.callRequiresNewMethodWithoutTransaction(entity);
 
 			// 有事务
-			//transactionPropagationService.callRequiresNewMethodWithTransaction(entity);	
+			propagationService.callRequiresNewMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testRequiresNew =====> ", e);
@@ -235,10 +234,10 @@ public class TransactionPropagationTest extends BaseTest {
 			 */
 			
 			// 无事务
-			transactionPropagationService.callSupportsMethodWithoutTransaction(entity);
+			//propagationService.callSupportsMethodWithoutTransaction(entity);
 
 			// 有事务
-			//transactionPropagationService.callSupportsMethodWithTransaction(entity);	
+			propagationService.callSupportsMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testSupports =====> ", e);
@@ -265,12 +264,15 @@ public class TransactionPropagationTest extends BaseTest {
 			/*
 			 * 测试的时候，无事务和有事务交替注释进行，以便观察结果
 			 */
-			
+			/*
+			 * llegalTransactionStateException: No existing transaction found 
+			 * for transaction marked with propagation 'mandatory'
+			 */
 			// 无事务
-			transactionPropagationService.callMandatoryMethodWithoutTransaction(entity);
+			//propagationService.callMandatoryMethodWithoutTransaction(entity);
 
 			// 有事务
-			//transactionPropagationService.callMandatoryMethodWithTransaction(entity);	
+			propagationService.callMandatoryMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testMandatory =====> ", e);
@@ -299,10 +301,10 @@ public class TransactionPropagationTest extends BaseTest {
 			 */
 			
 			// 无事务
-			transactionPropagationService.callNotSupportedMethodWithoutTransaction(entity);
+			propagationService.callNotSupportedMethodWithoutTransaction(entity);
 
 			// 有事务
-			//transactionPropagationService.callNotSupportedMethodWithTransaction(entity);	
+			propagationService.callNotSupportedMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testNotSupported =====> ", e);
@@ -331,10 +333,14 @@ public class TransactionPropagationTest extends BaseTest {
 			 */
 			
 			// 无事务
-			transactionPropagationService.callNeverMethodWithoutTransaction(entity);
+			//propagationService.callNeverMethodWithoutTransaction(entity);
 
-			// 有事务
-			//transactionPropagationService.callNeverMethodWithTransaction(entity);	
+			/*
+			 * 有事务
+			 * IllegalTransactionStateException: Existing transaction found 
+			 * for transaction marked with propagation 'never'
+			 */
+			propagationService.callNeverMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testNever =====> ", e);
@@ -363,10 +369,10 @@ public class TransactionPropagationTest extends BaseTest {
 			 */
 			
 			// 无事务
-			transactionPropagationService.callNestedMethodWithoutTransaction(entity);
+			//propagationService.callNestedMethodWithoutTransaction(entity);
 
 			// 有事务
-			//transactionPropagationService.callNestedMethodWithTransaction(entity);	
+			propagationService.callNestedMethodWithTransaction(entity);	
 			
 		} catch (Exception e) {
 			log.error("testNested =====> ", e);
@@ -445,7 +451,7 @@ public class TransactionPropagationTest extends BaseTest {
 			entity.setStatus(CustomStatus.NORMAL);
 			
 			
-			transactionPropagationService.doNoneTransaction(entity);
+			propagationService.doNoneTransaction(entity);
 			
 		} catch (Exception e) {
 			log.error("testDoNoneTransaction =====> ", e);

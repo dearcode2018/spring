@@ -1,5 +1,5 @@
 /**
-  * @filename TransactionPropagationService2.java
+  * @filename OtherService.java
   * @description 
   * @version 1.0
   * @author qianye.zheng
@@ -9,19 +9,17 @@ package com.hua.service;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.hua.dao.m2o.CustomDao;
 import com.hua.orm.entity.m2o.Custom;
 
  /**
- * @type TransactionPropagationService2
+ * @type OtherService
  * @description 
  * @author qianye.zheng
  */
 @Service
-public class TransactionPropagationService2
+public class OtherService
 {
 	
 	@Resource
@@ -29,102 +27,10 @@ public class TransactionPropagationService2
 	
 	/**
 	 * 
-	 * @description 强制
-	 * @param entity
-	 * @author qianye.zheng
-	 */
-	@Transactional(propagation = Propagation.MANDATORY)
-	public void mandatory(final Custom entity)
-	{
-		/*
-		 * Propagation.MANDATORY
-		 * 调用方必须有事务，无事务则抛异常.
-		 * 
-		 * 注意: 调用方无事务，在触发被调用方的时候发生异常.
-		 * 
-		 * 
-		 * 事务不是在被调用方中创建.
-		 */
-		
-		Object[] params = new Object[4];
-		params[0] = entity.getName();
-		params[1] = entity.getAddress();
-		params[2] = entity.getBalance();
-		params[3] = entity.getStatus().getValue();
-		
-		String sql = "insert into custom (name, address, balance, status) " +
-				"values (?, ?, ?, ?)";
-		
-		customDao.insert(sql, params);
-	}
-	
-	/**
-	 * 
-	 * @description 嵌套
-	 * @param entity
-	 * @author qianye.zheng
-	 */
-	@Transactional(propagation = Propagation.NESTED)
-	public void nested(final Custom entity)
-	{
-		/*
-		 * Propagation.NESTED
-		 * 被调用方嵌套在调用方的事务中执行.
-		 * 行为类似于 PROPAGATION_REQUIRED
-		 * 
-		 * 
-		 */
-		
-		Object[] params = new Object[4];
-		params[0] = entity.getName();
-		params[1] = entity.getAddress();
-		params[2] = entity.getBalance();
-		params[3] = entity.getStatus().getValue();
-		
-		String sql = "insert into custom (name, address, balance, status) " +
-				"values (?, ?, ?, ?)";
-		
-		customDao.insert(sql, params);
-	}
-	
-	/**
-	 * 
-	 * @description 从不
-	 * @param entity
-	 * @author qianye.zheng
-	 */
-	@Transactional(propagation = Propagation.NEVER)
-	public void never(final Custom entity)
-	{
-		/*
-		 * Propagation.NEVER
-		 * 不支持事务，若调用方有事务则抛异常.
-		 *  
-		 * 
-		 * 
-		 */
-		
-		
-		Object[] params = new Object[4];
-		params[0] = entity.getName();
-		params[1] = entity.getAddress();
-		params[2] = entity.getBalance();
-		params[3] = entity.getStatus().getValue();
-		
-		String sql = "insert into custom (name, address, balance, status) " +
-				"values (?, ?, ?, ?)";
-		
-		customDao.insert(sql, params);
-	}
-	
-	/**
-	 * 
 	 * @description 
 	 * @param entity
 	 * @author qianye.zheng
 	 */
-	@Transactional(propagation = Propagation.REQUIRED)
-	// @Transactional
 	public void required(final Custom entity)
 	{
 		/*
@@ -156,7 +62,6 @@ public class TransactionPropagationService2
 	 * @param entity
 	 * @author qianye.zheng
 	 */
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void requiresNew(final Custom entity)
 	{
 		/*
@@ -184,16 +89,18 @@ public class TransactionPropagationService2
 	
 	/**
 	 * 
-	 * @description 不支持
+	 * @description 嵌套
 	 * @param entity
 	 * @author qianye.zheng
 	 */
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public void notSupported(final Custom entity)
+	public void nested(final Custom entity)
 	{
 		/*
-		 * Propagation.NOT_SUPPORTED
-		 * 被调用方以非事务形式执行，若调用方有事务则挂起其事务.
+		 * Propagation.NESTED
+		 * 被调用方嵌套在调用方的事务中执行.
+		 * 行为类似于 PROPAGATION_REQUIRED
+		 * 
+		 * 
 		 */
 		
 		Object[] params = new Object[4];
@@ -214,7 +121,6 @@ public class TransactionPropagationService2
 	 * @param entity
 	 * @author qianye.zheng
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS)
 	public void supports(final Custom entity)
 	{
 		/*
@@ -236,5 +142,88 @@ public class TransactionPropagationService2
 		customDao.insert(sql, params);
 	}
 	
-
+	/**
+	 * 
+	 * @description 不支持
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	public void notSupported(final Custom entity)
+	{
+		/*
+		 * Propagation.NOT_SUPPORTED
+		 * 被调用方以非事务形式执行，若调用方有事务则挂起其事务.
+		 */
+		
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		
+		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
+	 * @description 强制
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	public void mandatory(final Custom entity)
+	{
+		/*
+		 * Propagation.MANDATORY
+		 * 调用方必须有事务，无事务则抛异常.
+		 * 
+		 * 注意: 调用方无事务，在触发被调用方的时候发生异常.
+		 * 
+		 * 
+		 * 事务不是在被调用方中创建.
+		 */
+		
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		
+		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
+	 * @description 从不
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	public void never(final Custom entity)
+	{
+		/*
+		 * Propagation.NEVER
+		 * 不支持事务，若调用方有事务则抛异常.
+		 *  
+		 * 
+		 * 
+		 */
+		
+		
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		
+		customDao.insert(sql, params);
+	}
+	
 }

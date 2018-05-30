@@ -2,13 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"		
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 	http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/aop	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd		
 	" default-lazy-init="true">
-
-
-	
 
 	<!-- 事务管理器 -->
 	<bean id="transactionManager" 
@@ -16,40 +15,29 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
-	<!-- 事务拦截器: 使用拦截器而不是aop-->
-	<bean id="transactionInterceptor" 
-		class="org.springframework.transaction.interceptor.TransactionInterceptor">
-		<property name="transactionManager" ref="transactionManager" />
-		<!-- 事务属性 -->
-		<property name="transactionAttributes">
-			<props>
-				<prop key="insert*">PROPAGATION_REQUIRED, -Exception</prop>
-				<prop key="delete*">PROPAGATION_REQUIRED</prop>
-				<prop key="update*">PROPAGATION_REQUIRED</prop>
-				<prop key="save*">PROPAGATION_REQUIRED</prop>
-				<prop key="tx*">PROPAGATION_REQUIRED</prop>
-				<prop key="operate*">PROPAGATION_REQUIRED, -Exception</prop>
-				<prop key="find*">PROPAGATION_REQUIRED, readOnly</prop>
-			</props>	
-		</property>
-	</bean>
+	<!-- 事务通知 (MySql) -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="required*" propagation="REQUIRED" />
+			<tx:method name="requiresNew*" propagation="REQUIRES_NEW" />
+			<tx:method name="nested*" propagation="NESTED" />	
+			<tx:method name="supports*" propagation="SUPPORTS" />
+			<tx:method name="notSupported*" propagation="NOT_SUPPORTED" />			
+			<tx:method name="mandatory*" propagation="MANDATORY" />
+			<tx:method name="never*" propagation="NEVER" />	
+			<!-- 配合测试使用，启用事务 -->
+			<tx:method name="call*WithTransaction" propagation="REQUIRED" />			
+			<!-- 其他的为只读 -->
+			<tx:method name="*" read-only="true" propagation="NOT_SUPPORTED" />
+		</tx:attributes>
+	</tx:advice>	
 
-	<!-- 事务代理 -->
-	<bean id="transactionProxy" 
-		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-		<!-- 指定dao层 -->
-		<property name="beanNames">
-			<list>
-				<value>com.hua.**.dao.**.*Dao</value>
-			</list>
-		</property>	
-		<!-- 指定事务拦截器 -->
-		<property name="interceptorNames">
-			<list>
-				<value>transactionInterceptor</value>
-			</list>
-		</property>
-	</bean>
+	<!-- 事务AOP配置 -->
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="transactionPointCut" expression="execution(* com.hua.service..*.*(..))" />
+		<!-- 引用上面的切点 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="transactionPointCut" order="2" />
+	</aop:config>
 	
 
 

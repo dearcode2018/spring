@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	" default-lazy-init="true">
+
+	<!-- 事务管理器 -->
+	<bean id="transactionManager" 
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 事务拦截器: 使用拦截器而不是aop-->
+	<bean id="transactionInterceptor" 
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+		<!-- 事务属性 -->
+		<property name="transactionAttributes">
+			<props>
+				<prop key="required*">PROPAGATION_REQUIRED, -Exception</prop>				
+				<prop key="requiresNew*">PROPAGATION_REQUIRES_NEW, -Exception</prop>
+				<prop key="nested*">PROPAGATION_NESTED, -Exception</prop>
+				<prop key="supports*">PROPAGATION_SUPPORTS, -Exception</prop>
+				<prop key="notSupported*">PROPAGATION_NOT_SUPPORTED, -Exception</prop>
+				<prop key="mandatory*">PROPAGATION_NOT_SUPPORTED, -Exception</prop>
+				<prop key="never*">PROPAGATION_NEVER, -Exception</prop>
+				<!-- 配合测试使用，启用事务 -->				
+				<prop key="call*WithTransaction">PROPAGATION_REQUIRED, -Exception</prop>				
+				<!-- 其他的为只读 -->
+				<prop key="*">PROPAGATION_NOT_SUPPORTED, readOnly</prop>					
+			</props>	
+		</property>
+	</bean>
+
+	<!-- 事务代理 -->
+	<bean id="transactionProxy" 
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<!-- 指定service层 -->
+		<property name="beanNames">
+			<!-- bean的名称，不能带包路径 -->
+			<list>
+				<value>*Service</value>
+	<!-- 
+				或者写具体的bean的名称
+					<value>otherSerivce</value>
+			错误格式: com.hua.service.*Service
+	 -->			
+			</list>
+		</property>	
+		<!-- 指定事务拦截器 -->
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -1,47 +1,29 @@
 /**
-  * @filename TransactionPropagationService3.java
+  * @filename OtherService.java
   * @description 
   * @version 1.0
   * @author qianye.zheng
  */
-package com.hua.service;
+package com.hua.spring;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.hua.dao.m2o.CustomDao;
 import com.hua.orm.entity.m2o.Custom;
 
  /**
- * @type TransactionPropagationService3
+ * @type OtherService
  * @description 
  * @author qianye.zheng
  */
 @Service
-public class TransactionPropagationService3
+public class OtherService
 {
 	
 	@Resource
 	private CustomDao customDao;
-	
-	@Resource
-	private TransactionPropagationService2 transactionPropagationService2;
-	
-	/**
-	 * @Transactional 注解是 被其他入口方法(main方法/
-	 * JUnit测试类方法/控制层方法等..)
-	 * 调用的时候，根据传播行为去做具体动作.
-	 * 在方法的调用之间，相对发生行为，需要怎么样的事务，要根据自身方法
-	 * 事务注解的声明.
-	 * 
-	 *
-	 * 一个方法的事务传播属性的声明，直接影响的其上一级方法.
-	 *
-	 */
-	
 	
 	/**
 	 * 
@@ -49,8 +31,6 @@ public class TransactionPropagationService3
 	 * @param entity
 	 * @author qianye.zheng
 	 */
-	@Transactional(propagation = Propagation.REQUIRED)
-	// @Transactional
 	public void required(final Custom entity)
 	{
 		/*
@@ -62,22 +42,6 @@ public class TransactionPropagationService3
 		 * 将创建一个事务.
 		 * 
 		 */
-		
-		/**
-		 * 场景:
-		 * requiresNew 先执行，requiresNew本身不重要
-		 * 表明requiresNew无论成功和失败都无关重要.
-		 * 因此，为了确保当前方法的顺利执行，可以直接try-catch住
-		 * requiresNew方法，避免发生不重要的异常而导致主业务停止运行.
-		 */
-		// 调用当前对象的其他方法
-		try
-		{
-			this.requiresNew(entity);
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 		
 		Object[] params = new Object[4];
 		params[0] = entity.getName();
@@ -98,7 +62,6 @@ public class TransactionPropagationService3
 	 * @param entity
 	 * @author qianye.zheng
 	 */
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void requiresNew(final Custom entity)
 	{
 		/*
@@ -126,11 +89,38 @@ public class TransactionPropagationService3
 	
 	/**
 	 * 
+	 * @description 嵌套
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	public void nested(final Custom entity)
+	{
+		/*
+		 * Propagation.NESTED
+		 * 被调用方嵌套在调用方的事务中执行.
+		 * 行为类似于 PROPAGATION_REQUIRED
+		 * 
+		 * 
+		 */
+		
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		
+		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
 	 * @description 支持
 	 * @param entity
 	 * @author qianye.zheng
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS)
 	public void supports(final Custom entity)
 	{
 		/*
@@ -150,9 +140,31 @@ public class TransactionPropagationService3
 				"values (?, ?, ?, ?)";
 		
 		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
+	 * @description 不支持
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	public void notSupported(final Custom entity)
+	{
+		/*
+		 * Propagation.NOT_SUPPORTED
+		 * 被调用方以非事务形式执行，若调用方有事务则挂起其事务.
+		 */
 		
-		// 调用其他对象的方法
-		//transactionPropagationService2.insert1(entity);
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		
+		customDao.insert(sql, params);
 	}
 	
 	/**
@@ -161,7 +173,6 @@ public class TransactionPropagationService3
 	 * @param entity
 	 * @author qianye.zheng
 	 */
-	@Transactional(propagation = Propagation.MANDATORY)
 	public void mandatory(final Custom entity)
 	{
 		/*
@@ -188,40 +199,10 @@ public class TransactionPropagationService3
 	
 	/**
 	 * 
-	 * @description 嵌套
-	 * @param entity
-	 * @author qianye.zheng
-	 */
-	@Transactional(propagation = Propagation.NESTED)
-	public void nested(final Custom entity)
-	{
-		/*
-		 * Propagation.NESTED
-		 * 被调用方嵌套在调用方的事务中执行.
-		 * 行为类似于 PROPAGATION_REQUIRED
-		 * 
-		 * 
-		 */
-		
-		Object[] params = new Object[4];
-		params[0] = entity.getName();
-		params[1] = entity.getAddress();
-		params[2] = entity.getBalance();
-		params[3] = entity.getStatus().getValue();
-		
-		String sql = "insert into custom (name, address, balance, status) " +
-				"values (?, ?, ?, ?)";
-		
-		customDao.insert(sql, params);
-	}
-	
-	/**
-	 * 
 	 * @description 从不
 	 * @param entity
 	 * @author qianye.zheng
 	 */
-	@Transactional(propagation = Propagation.NEVER)
 	public void never(final Custom entity)
 	{
 		/*
@@ -232,33 +213,6 @@ public class TransactionPropagationService3
 		 * 
 		 */
 		
-		
-		Object[] params = new Object[4];
-		params[0] = entity.getName();
-		params[1] = entity.getAddress();
-		params[2] = entity.getBalance();
-		params[3] = entity.getStatus().getValue();
-		
-		String sql = "insert into custom (name, address, balance, status) " +
-				"values (?, ?, ?, ?)";
-		
-		customDao.insert(sql, params);
-	}
-	
-	/**
-	 * 
-	 * @description 不支持
-	 * @param entity
-	 * @author qianye.zheng
-	 */
-	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public void notSupported(final Custom entity)
-	{
-		
-		/*
-		 * Propagation.NOT_SUPPORTED
-		 * 被调用方以非事务形式执行，若调用方有事务则挂起其事务.
-		 */
 		
 		Object[] params = new Object[4];
 		params[0] = entity.getName();
