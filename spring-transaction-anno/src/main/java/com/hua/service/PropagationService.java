@@ -483,4 +483,189 @@ public class PropagationService
 		customDao.insert(sql, params);
 	}
 	
+	/* ======================================== */
+	/**
+	 * 内部事务方法之间的调用:
+	 * 方法无论私有还是公有，事务都是以SUPPORTS方式来传播
+	 * 即没有事务则以无事务形式执行，有事务则在事务里面执行.
+	 * 
+	 */
+	
+	/**
+	 * 
+	 * @description 
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	public void invokeInternalPublicMethodWithoutTransaction(final Custom entity)
+	{
+		// 调用当前对象的公有方法
+		this.internalPublic(entity);
+		
+		// 
+		// 当前方法没有事务，因此下面的dao操作将不会提交
+		entity.setName("当前方法没有事务，因此下面的dao操作将不会提交");
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
+	 * @description 
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void invokeInternalPublicMethodWithTransaction(final Custom entity)
+	{
+		/*
+		 * 有事务，调用的公有方法使用当前事务执行
+		 */
+		// 调用当前对象的公有方法
+		this.internalPublic(entity);
+		
+		// 当前方法有事务，因此下面的dao操作将会提交
+		entity.setName("当前方法有事务，internalPublic()将以事务方式正常执行.");
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
+	 * @description 内部的公有方法
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	public void internalPublic(final Custom entity)
+	{
+		
+		/*
+		 * 由于mysql 默认是自动提交的，无法测试没有事务的情况，需要修改mysql的配置，
+		在mysql主目录下，修改my.ini 设置 autocommit=0
+		查看 autocommit 变量值 
+		show VARIABLES like '%autocommit%';
+		 */
+		
+		/*
+		 * Propagation.MANDATORY
+		 * 调用方必须有事务，无事务则抛异常.
+		 * 
+		 * 注意: 调用方无事务，在触发被调用方的时候发生异常.
+		 * 
+		 * 
+		 * 事务不是在被调用方中创建.
+		 */
+		
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		
+		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
+	 * @description 
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	public void invokeInternalPrivateMethodWithoutTransaction(final Custom entity)
+	{
+		// 调用当前对象的私有方法
+		this.internalPrivate(entity);
+		
+		// 
+		// 当前方法没有事务，因此下面的dao操作将不会提交
+		entity.setName("当前方法没有事务，因此下面的dao操作将不会提交");
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
+	 * @description 
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void invokeInternalPrivateMethodWithTransaction(final Custom entity)
+	{
+		/*
+		 * 有事务，调用的私有方法使用当前事务执行
+		 */
+		// 调用当前对象的私有方法
+		this.internalPrivate(entity);
+		
+		// 当前方法有事务，因此下面的dao操作将会提交
+		entity.setName("当前方法有事务，internalPrivate()将以事务方式正常执行.");
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
+	 * @description 内部的私有方法
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	private void internalPrivate(final Custom entity)
+	{
+		
+		/*
+		 * 由于mysql 默认是自动提交的，无法测试没有事务的情况，需要修改mysql的配置，
+		在mysql主目录下，修改my.ini 设置 autocommit=0
+		查看 autocommit 变量值 
+		show VARIABLES like '%autocommit%';
+		 */
+		
+		/*
+		 * Propagation.MANDATORY
+		 * 调用方必须有事务，无事务则抛异常.
+		 * 
+		 * 注意: 调用方无事务，在触发被调用方的时候发生异常.
+		 * 
+		 * 
+		 * 事务不是在被调用方中创建.
+		 */
+		
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		
+		customDao.insert(sql, params);
+	}
 }

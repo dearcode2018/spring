@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hua.constant.ext.CustomStatus;
 import com.hua.orm.entity.m2o.Custom;
-import com.hua.spring.TransactionService;
+import com.hua.service.TransactionService;
 import com.hua.test.BaseTest;
 
 //import org.springframework.test.context.transaction.TransactionConfiguration;

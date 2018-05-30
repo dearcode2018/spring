@@ -4,7 +4,7 @@
   * @version 1.0
   * @author qianye.zheng
  */
-package com.hua.spring;
+package com.hua.service;
 
 import javax.annotation.Resource;
 
@@ -56,7 +56,7 @@ public class TransactionService
 		final DefaultTransactionDefinition transactionDefinition = 
 				new DefaultTransactionDefinition();
 		// 事务名称
-		transactionDefinition.setName("transactionManager");
+		//transactionDefinition.setName("transactionManager");
 		// 隔离级别: 可重复读 或者直接使用数据库的默认值
 		transactionDefinition.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
 		// 使用默认值

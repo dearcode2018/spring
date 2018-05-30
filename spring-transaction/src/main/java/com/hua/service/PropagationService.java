@@ -4,7 +4,7 @@
   * @version 1.0
   * @author qianye.zheng
  */
-package com.hua.spring;
+package com.hua.service;
 
 import javax.annotation.Resource;
 

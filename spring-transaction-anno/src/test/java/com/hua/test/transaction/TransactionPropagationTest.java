@@ -456,6 +456,65 @@ public class TransactionPropagationTest extends BaseTest {
 		}
 	}
 	
+	
+	/**
+	 * 
+	 * 描述: 
+	 * @author qye.zheng
+	 * 
+	 */
+	@Test
+	public void testInvokeInternalPublicMethod() {
+		try {
+			/*
+			 * 以无事务、有事务调用对象内部的公有方法
+			 */
+			Custom entity = null;
+			
+			entity = new Custom();
+			entity.setName("InvokeInternalPublicMethod");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			//propagationService.invokeInternalPublicMethodWithoutTransaction(entity);
+			
+			propagationService.invokeInternalPublicMethodWithTransaction(entity);
+			
+		} catch (Exception e) {
+			log.error("testInvokeInternalPublicMethod =====> ", e);
+		}
+	}
+	
+	/**
+	 * 
+	 * 描述: 
+	 * @author qye.zheng
+	 * 
+	 */
+	@Test
+	public void testInvokeInternalPrivateMethod() {
+		try {
+			/*
+			 * 以无事务、有事务调用对象内部的私有方法
+			 */
+			Custom entity = null;
+			
+			entity = new Custom();
+			entity.setName("InvokeInternalPrivateMethod");
+			entity.setAddress("广州市天河东路112号");
+			entity.setBalance(10.34);
+			entity.setStatus(CustomStatus.NORMAL);
+			
+			//propagationService.invokeInternalPrivateMethodWithoutTransaction(entity);
+			
+			propagationService.invokeInternalPrivateMethodWithTransaction(entity);
+
+		} catch (Exception e) {
+			log.error("testInvokeInternalPrivateMethod =====> ", e);
+		}
+	}
+	
 	/**
 	 * 
 	 * 描述: 
