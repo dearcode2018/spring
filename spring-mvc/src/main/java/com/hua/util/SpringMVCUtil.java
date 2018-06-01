@@ -6,7 +6,7 @@
 package com.hua.util;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -48,9 +48,9 @@ public final class SpringMVCUtil
 	 * @return
 	 * @author qye.zheng
 	 */
-	public static final WebApplicationContext getSubWebApplicationContext(final ServletRequest servletRequest)
+	public static final WebApplicationContext getSubWebApplicationContext(final HttpServletRequest servletRequest)
 	{
-		return RequestContextUtils.getWebApplicationContext(servletRequest);
+		return RequestContextUtils.findWebApplicationContext(servletRequest);
 	}
 	
 }

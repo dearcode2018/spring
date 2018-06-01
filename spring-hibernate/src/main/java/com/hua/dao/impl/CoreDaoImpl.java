@@ -10,11 +10,11 @@ package com.hua.dao.impl;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
-//spring-hibernate，已不推荐使用
-//import org.springframework.orm.hibernate.support.HibernateDaoSupport;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import com.hua.dao.CoreDao;
+//spring-hibernate，已不推荐使用
+//import org.springframework.orm.hibernate.support.HibernateDaoSupport;
 
 /**
  * 描述: 

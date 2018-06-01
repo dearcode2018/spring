@@ -9,7 +9,7 @@ package com.hua.dao;
 
 import java.util.List;
 
-import org.springframework.orm.hibernate4.HibernateTemplate;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 //spring-hibernate，已不推荐使用
 //import org.springframework.orm.hibernate.support.HibernateTemplate;
 

@@ -31,6 +31,10 @@ public class PropagationService
 	/*
 	 * 由于调用当前对象的其他方法事务的声明没有生效，
 	 * 因此改为调用其他对象的方法
+	 * 
+	 * 若一定要调用当前对象的方法，可以通过获取当前代理对象
+	 * 来调用方法: AopContext.currentProxy();
+	 * 
 	 */
 	@Resource
 	private OtherService otherService;
@@ -45,6 +49,10 @@ public class PropagationService
 	 * 
 	 *
 	 * 一个方法的事务传播属性的声明，直接影响的其上一级方法.
+	 *
+	 * 每个 @Transactional 方法，Spring IOC中都会生成一个代理对象，
+	 * 覆盖这个方法，因此如果这个方法是final类型，则在此方法中无法
+	 * 从IOC中获取资源.
 	 *
 	 */
 	

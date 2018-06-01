@@ -1,6 +1,6 @@
 /**
  * 描述: 
- * AOPBeanAdviceTest.java
+ * AopContextTest.java
  * 
  * @author qye.zheng
  *  version 1.0
@@ -20,16 +20,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import javax.annotation.Resource;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.hua.bean.User;
-import com.hua.service.UserBusiness;
 import com.hua.test.BaseTest;
 
 
@@ -37,7 +34,7 @@ import com.hua.test.BaseTest;
  * 描述: 
  * 
  * @author qye.zheng
- * AOPBeanAdviceTest
+ * AopContextTest
  */
 /*
  * 
@@ -47,8 +44,8 @@ import com.hua.test.BaseTest;
 // for Junit 4.x
 @RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(locations = {"classpath:conf/xml/applicationContext.xml"})
-@ContextConfiguration(locations = {"classpath:conf/xml/aop-bean-advice.xml"})
-public final class AOPBeanAdviceTest extends BaseTest {
+@ContextConfiguration(locations = {"", ""})
+public final class AopContextTest extends BaseTest {
 
 	/**
 	 * 引当前项目用其他项目之后，然后可以使用
@@ -60,47 +57,6 @@ public final class AOPBeanAdviceTest extends BaseTest {
 	 * 
 	 */
 	
-	/* 注入指定的bean */
-	@Resource(name = "userBusiness")
-	private UserBusiness userBusiness;
-	
-	/**
-	 * 
-	 * 描述: 
-	 * @author qye.zheng
-	 * 
-	 */
-	@Test
-	public void testBeforeAdvice() {
-		try {
-			final User user = new User();
-			user.setUsername("aopBeanAspect");
-			userBusiness.add(user);
-			//userBusiness.add(null);
-			
-		} catch (Exception e) {
-			log.error("testBeforeAdvice =====> ", e);
-		}
-	}
-	
-	/**
-	 * 
-	 * 描述: 
-	 * @author qye.zheng
-	 * 
-	 */
-	@Test
-	public void testAfterAdvice() {
-		try {
-			userBusiness.add(null);
-			
-			//userBusiness.delete(null);
-			
-		} catch (Exception e) {
-			log.error("testAfterAdvice =====> ", e);
-		}
-	}
-	
 	/**
 	 * 
 	 * 描述: 
@@ -110,9 +66,12 @@ public final class AOPBeanAdviceTest extends BaseTest {
 	@Test
 	public void testSpringJunit() {
 		try {
-			userBusiness.add(null);
-			
-			//userBusiness.delete(null);
+			/*
+			 * 调用次方法，可以从Spring IOC容器中
+			 * 获取当前对象的代理对象
+			 * AopContext.currentProxy();
+			 */
+			//XX xx = (XX) AopContext.currentProxy();
 			
 		} catch (Exception e) {
 			log.error("testSpringJunit =====> ", e);
