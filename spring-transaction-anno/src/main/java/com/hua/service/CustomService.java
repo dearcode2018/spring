@@ -8,7 +8,9 @@ package com.hua.service;
 
 import javax.annotation.Resource;
 
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hua.dao.m2o.CustomDao;
@@ -162,6 +164,44 @@ public class CustomService
 	 */
 	@Transactional(transactionManager = "transactionManager")
 	public void insert6(final Custom entity)
+	{
+		Object[] params = new Object[4];
+		params[0] = entity.getName();
+		params[1] = entity.getAddress();
+		params[2] = entity.getBalance();
+		params[3] = entity.getStatus().getValue();
+		
+		String sql = "insert into custom (name, address, balance, status) " +
+				"values (?, ?, ?, ?)";
+		
+		customDao.insert(sql, params);
+	}
+	
+	/**
+	 * 
+	 * @description 
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	//@Transactional(transactionManager = "transactionManager")
+	public void callInternalMethod(final Custom entity)
+	{
+		CustomService service = (CustomService) AopContext.currentProxy();
+		System.out.println("CustomService.callInternalMethod()");
+		
+		service.requiresNew(entity);
+		
+		//this.requiresNew(entity);
+	}
+	
+	/**
+	 * 
+	 * @description 
+	 * @param entity
+	 * @author qianye.zheng
+	 */
+	@Transactional(transactionManager = "transactionManager", propagation = Propagation.REQUIRES_NEW)
+	public void requiresNew(final Custom entity)
 	{
 		Object[] params = new Object[4];
 		params[0] = entity.getName();
