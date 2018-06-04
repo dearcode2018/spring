@@ -30,6 +30,7 @@
 		<module>spring-jms</module>		
 		<module>spring-jsp</module>		
 		<module>spring-junit</module>		
+		<module>spring-ldap</module>
 		<module>spring-mix</module>		
 		<module>spring-mvc</module>		
 		<module>spring-mvc-param</module>		
