@@ -42,6 +42,7 @@
 		<module>spring-sign</module>	
 		<module>spring-transaction</module>	
 		<module>spring-transaction-anno</module>
+		<module>spring-transaction-mysql</module>
 		<module>spring-transaction-xml</module>
 		<module>spring-test</module>		
 		<module>spring-tx</module>	
