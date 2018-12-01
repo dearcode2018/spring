@@ -1,6 +1,6 @@
 /**
  * 描述: 
- * UserControllerTest.java
+ * MVCTemplateTest.java
  * 
  * @author qye.zheng
  *  version 1.0
@@ -46,7 +46,7 @@ import com.hua.test.BaseTest;
  * 描述: 
  * 
  * @author qye.zheng
- * UserControllerTest
+ * MVCTemplateTest
  */
 /*
  * 
