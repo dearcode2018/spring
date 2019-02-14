@@ -17,4 +17,7 @@ public interface UriConstant
 	String API = "/api/";
 
 	String OUT = "/out/";
+	
+	String FORWARD = "/forward";
+	
 }

@@ -32,6 +32,25 @@ public class PersonSearchBean extends BaseBean
 	
 	//@XStreamAlias("queryBean")
 	private OtherQueryBean queryBean;
+	
+	/* 创建时间 */
+	private String createDt;
+	
+	/**
+	* @return the createDt
+	*/
+	public String getCreateDt()
+	{
+		return createDt;
+	}
+
+	/**
+	* @param createDt the createDt to set
+	*/
+	public void setCreateDt(String createDt)
+	{
+		this.createDt = createDt;
+	}
 
 	/**
 	 * @return the name

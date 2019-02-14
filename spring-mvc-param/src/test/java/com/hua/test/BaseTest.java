@@ -24,6 +24,10 @@ import com.hua.log.BaseLog;
  */
 //@RunWith()
 public class BaseTest extends BaseLog {
+	
+	protected String prefix;
+	
+	
 	/**
 	 * 
 	 * 描述: [所有测试]开始之前运行
