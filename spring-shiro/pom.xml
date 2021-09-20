@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<spring.web.version>0.0.1</spring.web.version>
-		<shiro.version>1.2.3</shiro.version>
+		<shiro.version>1.8.0</shiro.version>
 	</properties>
 
 	<dependencies>
