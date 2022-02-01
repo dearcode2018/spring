@@ -27,7 +27,7 @@
 		<httpcomponent.version>4.4.1</httpcomponent.version>
 		<httpasyncclient.version>4.1</httpasyncclient.version>
 		<httpclient.version>3.1</httpclient.version>
-		<xstream.version>1.4.8</xstream.version>		
+		<xstream.version>1.4.19</xstream.version>		
 		<jedis.version>2.6.2</jedis.version>
 		<spring-data-redis.version>1.5.0.RELEASE</spring-data-redis.version>									
 	</properties>
