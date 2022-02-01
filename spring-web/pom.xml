@@ -15,7 +15,7 @@
 		
 		<web.version>0.0.1</web.version>
 		<spring.version>0.0.1</spring.version>
-		<xstream.version>1.4.8</xstream.version>								
+		<xstream.version>1.4.19</xstream.version>								
 	</properties>
 
 	<dependencies>
